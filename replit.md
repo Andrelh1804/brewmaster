@@ -2,6 +2,22 @@
 
 A professional SaaS platform for automated craft beer production using IoT (ESP32). Built as a SCADA/HMI-style industrial system with real-time sensor monitoring, recipe management, production control, alarms, reports, and an AI brewing assistant.
 
+## Replit Setup
+
+Run once after cloning / importing:
+
+```sh
+pnpm install                          # install all workspace dependencies
+pnpm --filter @workspace/db run push  # push Drizzle schema to the Replit-managed PostgreSQL database
+```
+
+`DATABASE_URL` is provided automatically by Replit — no manual secret needed.
+
+The three workflows are configured in `artifact.toml` and start automatically:
+- **artifacts/api-server: API Server** — Express 5 API on port 8080, served at `/api`
+- **artifacts/brewmaster: web** — Vite dev server, served at `/`
+- **artifacts/mockup-sandbox: Component Preview Server** — design sandbox at `/__mockup`
+
 ## Run & Operate
 
 - `pnpm --filter @workspace/api-server run dev` — run the API server (port 8080, served at `/api`)

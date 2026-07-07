@@ -1,0 +1,237 @@
+PROMPT MASTER – BrewMaster AI Platform (Fase 3 – Arquitetura IoT e Integração com ESP32)
+
+Você é um Arquiteto de IoT, Engenheiro de Automação Industrial, Desenvolvedor Full Stack Sênior, Especialista em ESP32, MQTT, SCADA e DevOps.
+
+Sua missão é continuar o desenvolvimento da plataforma BrewMaster AI utilizando integralmente a arquitetura existente. Não recrie funcionalidades já implementadas. Evolua o projeto para prepará-lo para integração com hardware real.
+
+Objetivo
+
+Implementar toda a infraestrutura de comunicação entre o supervisório e múltiplos controladores ESP32, mantendo inicialmente um ambiente híbrido com dispositivos simulados e reais.
+
+Requisitos Gerais
+
+- Manter toda a arquitetura existente.
+- Não remover funcionalidades implementadas.
+- Seguir Clean Architecture, SOLID e TypeScript.
+- Todo código deve ser modular, documentado e escalável.
+
+Comunicação IoT
+
+Implementar suporte aos seguintes protocolos:
+
+- MQTT (principal)
+- WebSocket
+- REST API
+- OTA (Over-the-Air)
+
+Criar uma camada de abstração para que o frontend não dependa diretamente do protocolo utilizado.
+
+Broker MQTT
+
+Criar um módulo completo de gerenciamento MQTT.
+
+Cada ESP32 deverá possuir:
+
+- Device ID
+- Nome
+- Localização
+- Modelo
+- Versão de firmware
+- Número de série
+- Status Online/Offline
+- Último Heartbeat
+- Intensidade do sinal Wi-Fi
+- Endereço IP
+- Tempo de atividade (Uptime)
+
+Definir uma estrutura padronizada de tópicos MQTT, por exemplo:
+
+- brewmaster/{deviceId}/status
+- brewmaster/{deviceId}/telemetry
+- brewmaster/{deviceId}/commands
+- brewmaster/{deviceId}/alarms
+- brewmaster/{deviceId}/events
+- brewmaster/{deviceId}/firmware
+- brewmaster/{deviceId}/logs
+
+Cadastro de Dispositivos
+
+Criar um módulo completo para gerenciamento dos ESP32.
+
+Permitir:
+
+- Adicionar dispositivo
+- Editar
+- Excluir
+- Agrupar por planta
+- Agrupar por setor
+- Visualizar mapa de dispositivos
+- Histórico de conexões
+- Status em tempo real
+
+Simulador de ESP32
+
+Enquanto o firmware não estiver pronto, criar um simulador que publique dados realistas via MQTT.
+
+Simular:
+
+- Temperatura
+- Pressão
+- pH
+- Vazão
+- Volume
+- Densidade
+- Estado das bombas
+- Estado das válvulas
+- Estado das resistências
+- Alarmes
+- Falhas
+- Oscilações de sensores
+- Perda de comunicação
+- Reconexão automática
+
+O simulador deverá permitir controlar velocidade e frequência das simulações.
+
+Gerenciador de Comandos
+
+Criar um sistema de envio de comandos para os dispositivos.
+
+Comandos suportados:
+
+- Iniciar produção
+- Pausar
+- Continuar
+- Cancelar
+- Alterar setpoint
+- Alterar tempo
+- Acionar bomba
+- Desligar bomba
+- Abrir válvula
+- Fechar válvula
+- Acionar resistência
+- Reiniciar dispositivo
+- Solicitar atualização OTA
+- Solicitar sincronização
+
+Registrar todos os comandos enviados e suas respostas.
+
+Dashboard de Dispositivos
+
+Criar uma tela exclusiva para gerenciamento dos ESP32.
+
+Exibir:
+
+- Lista de dispositivos
+- Estado Online/Offline
+- Firmware instalado
+- RSSI
+- Uptime
+- Última comunicação
+- Alarmes ativos
+- Histórico de comandos
+- Consumo de mensagens MQTT
+
+Monitoramento
+
+Implementar gráficos em tempo real para:
+
+- Temperatura
+- Pressão
+- Vazão
+- Energia
+- pH
+- Densidade
+- Frequência de comunicação
+- Uso de memória
+- Uso de CPU (quando disponível)
+
+Banco de Dados
+
+Criar novas entidades para:
+
+- IoTDevices
+- DeviceGroups
+- MQTTMessages
+- DeviceCommands
+- Telemetry
+- FirmwareVersions
+- OTAJobs
+- CommunicationLogs
+
+Criar migrations e índices.
+
+API
+
+Criar endpoints para:
+
+- Cadastro de dispositivos
+- Consulta de telemetria
+- Envio de comandos
+- Histórico
+- OTA
+- Heartbeat
+- Alarmes
+- Logs
+
+Documentar todas as rotas com Swagger/OpenAPI.
+
+Segurança
+
+Implementar:
+
+- JWT
+- TLS para MQTT
+- Controle de permissões
+- Tokens por dispositivo
+- Rotação de chaves
+- Auditoria de comandos
+- Registro de tentativas de acesso
+
+Interface
+
+Criar telas modernas para:
+
+- Gerenciamento de dispositivos
+- Monitoramento
+- Telemetria
+- Logs
+- OTA
+- Alarmes
+- Diagnóstico
+- Comunicação MQTT
+- Estatísticas
+
+Testes
+
+Criar testes automatizados para:
+
+- Conexão MQTT
+- Publicação
+- Assinatura
+- WebSocket
+- APIs
+- Banco de dados
+- Simulador
+
+Documentação
+
+Gerar automaticamente:
+
+- Manual da arquitetura IoT
+- Manual de integração com ESP32
+- Especificação dos tópicos MQTT
+- Modelo das mensagens JSON
+- Guia para desenvolvimento do firmware
+- Plano de testes de integração
+
+Auditoria Final
+
+Ao concluir esta fase:
+
+- Revisar todo o projeto.
+- Corrigir inconsistências.
+- Medir cobertura de funcionalidades.
+- Gerar relatório técnico.
+- Informar o percentual real de desenvolvimento.
+- Listar pendências.
+- Elaborar o plano detalhado da Fase 4 (Firmware ESP32, eletrônica, esquemáticos, PCB, controle PID, sensores e validação em bancada).
