@@ -19,23 +19,23 @@ export default function Reports() {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">Analytics & Reports</h1>
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
+      <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Análises e Relatórios</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card className="bg-sidebar border-border/50">
           <CardHeader>
-            <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Production Stats</CardTitle>
+            <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Estatísticas de Produção</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <div className="text-3xl font-mono font-bold text-primary">{prodReport?.totalRuns ?? 0}</div>
-                <div className="text-xs text-muted-foreground uppercase tracking-widest">Total Runs</div>
+                <div className="text-xs text-muted-foreground uppercase tracking-widest">Total de Bateladas</div>
               </div>
               <div>
                 <div className="text-3xl font-mono font-bold text-emerald-500">{prodReport?.completedRuns ?? 0}</div>
-                <div className="text-xs text-muted-foreground uppercase tracking-widest">Completed</div>
+                <div className="text-xs text-muted-foreground uppercase tracking-widest">Concluídas</div>
               </div>
             </div>
             <div className="h-48 mt-6">
@@ -55,7 +55,7 @@ export default function Reports() {
 
         <Card className="bg-sidebar border-border/50">
           <CardHeader>
-            <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Alarm Distribution</CardTitle>
+            <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Distribuição de Alarmes</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64 flex flex-col items-center justify-center">
@@ -78,26 +78,26 @@ export default function Reports() {
                   </PieChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="text-muted-foreground text-sm font-mono">No alarm data</div>
+                <div className="text-muted-foreground text-sm font-mono">Sem dados de alarme</div>
               )}
             </div>
           </CardContent>
         </Card>
         
-        <Card className="bg-sidebar border-border/50 md:col-span-3">
+        <Card className="bg-sidebar border-border/50 sm:col-span-2 lg:col-span-3">
           <CardHeader>
-            <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Telemetry Trends</CardTitle>
+            <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Tendências de Telemetria</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-80 w-full">
+            <div className="h-64 sm:h-80 w-full">
               {sensorReport && sensorReport.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
-                    <XAxis dataKey="timestamp" stroke="#666" tickFormatter={(t) => new Date(t).toLocaleTimeString()} tick={{fontSize: 10}} />
+                    <XAxis dataKey="timestamp" stroke="#666" tickFormatter={(t) => new Date(t).toLocaleTimeString('pt-BR')} tick={{fontSize: 10}} />
                     <YAxis stroke="#666" tick={{fontSize: 10}} />
                     <RechartsTooltip 
-                      labelFormatter={(t) => new Date(t).toLocaleString()}
+                      labelFormatter={(t) => new Date(t).toLocaleString('pt-BR')}
                       contentStyle={{backgroundColor: '#111', borderColor: '#333', fontSize: '12px'}} 
                     />
                     {sensorReport.map((series, i) => (
@@ -115,7 +115,7 @@ export default function Reports() {
                   </LineChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="h-full flex items-center justify-center text-muted-foreground font-mono">No telemetry data available</div>
+                <div className="h-full flex items-center justify-center text-muted-foreground font-mono">Sem dados de telemetria disponíveis</div>
               )}
             </div>
           </CardContent>

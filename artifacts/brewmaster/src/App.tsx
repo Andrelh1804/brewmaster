@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import NotFound from '@/pages/not-found';
 import { Route, Switch, Router as WouterRouter } from 'wouter';
 import { Sidebar } from '@/components/layout/sidebar';
+import { Menu, Settings2 } from 'lucide-react';
+import { useEffect } from 'react';
 
 import Dashboard from '@/pages/dashboard';
 import Production from '@/pages/production';
@@ -22,27 +24,55 @@ import Settings from '@/pages/settings';
 const queryClient = new QueryClient();
 
 function Router() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="flex h-[100dvh] w-full bg-background text-foreground overflow-hidden font-sans">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto overflow-x-hidden relative">
-        <Switch>
-          <Route path="/" component={Dashboard} />
-          <Route path="/production" component={Production} />
-          <Route path="/recipes" component={Recipes} />
-          <Route path="/equipment" component={Equipment} />
-          <Route path="/sensors" component={Sensors} />
-          <Route path="/actuators" component={Actuators} />
-          <Route path="/alarms" component={Alarms} />
-          <Route path="/history" component={History} />
-          <Route path="/reports" component={Reports} />
-          <Route path="/users" component={Users} />
-          <Route path="/ai" component={AiAssistant} />
-          <Route path="/settings" component={Settings} />
-          <Route path="/logs" component={History} />
-          <Route component={NotFound} />
-        </Switch>
-      </main>
+      {/* Overlay mobile */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 z-20 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+        {/* Cabeçalho mobile */}
+        <div className="h-14 flex items-center px-4 border-b border-border md:hidden bg-sidebar shrink-0">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-sidebar-accent transition-colors"
+            aria-label="Abrir menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+          <div className="flex items-center gap-2 ml-3 text-primary font-bold tracking-wider">
+            <Settings2 className="w-5 h-5" />
+            <span>BREWMASTER AI</span>
+          </div>
+        </div>
+
+        <main className="flex-1 overflow-y-auto overflow-x-hidden relative">
+          <Switch>
+            <Route path="/" component={Dashboard} />
+            <Route path="/production" component={Production} />
+            <Route path="/recipes" component={Recipes} />
+            <Route path="/equipment" component={Equipment} />
+            <Route path="/sensors" component={Sensors} />
+            <Route path="/actuators" component={Actuators} />
+            <Route path="/alarms" component={Alarms} />
+            <Route path="/history" component={History} />
+            <Route path="/reports" component={Reports} />
+            <Route path="/users" component={Users} />
+            <Route path="/ai" component={AiAssistant} />
+            <Route path="/settings" component={Settings} />
+            <Route path="/logs" component={History} />
+            <Route component={NotFound} />
+          </Switch>
+        </main>
+      </div>
     </div>
   );
 }

@@ -18,17 +18,17 @@ export default function Settings() {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
-        <ServerCog className="w-8 h-8 text-primary" />
-        <h1 className="text-3xl font-bold tracking-tight">System Settings</h1>
+        <ServerCog className="w-7 h-7 sm:w-8 sm:h-8 text-primary" />
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Configurações do Sistema</h1>
       </div>
 
       <div className="grid gap-6">
         <Card className="bg-sidebar border-border/50 shadow-xl">
           <CardHeader>
-            <CardTitle>Simulator Control</CardTitle>
-            <CardDescription>Force advance the hardware simulator to generate new sensor readings and progress production stages.</CardDescription>
+            <CardTitle>Controle do Simulador</CardTitle>
+            <CardDescription>Avança o simulador de hardware para gerar novas leituras de sensores e progredir as etapas de produção.</CardDescription>
           </CardHeader>
           <CardContent>
             <Button 
@@ -37,18 +37,18 @@ export default function Settings() {
               className="font-bold tracking-widest uppercase gap-2"
             >
               <Activity className="w-4 h-4" /> 
-              {simTick.isPending ? "Ticking..." : "Trigger Simulator Tick"}
+              {simTick.isPending ? "Executando..." : "Acionar Tick do Simulador"}
             </Button>
             <p className="text-xs text-muted-foreground mt-4 font-mono">
-              In a real environment, sensors push data automatically. This overrides the internal clock for testing.
+              Em um ambiente real, os sensores enviam dados automaticamente. Este controle substitui o relógio interno para fins de teste.
             </p>
           </CardContent>
         </Card>
 
         <Card className="bg-sidebar border-border/50 shadow-xl opacity-50">
           <CardHeader>
-            <CardTitle>IoT Gateway Configuration</CardTitle>
-            <CardDescription>MQTT broker settings and device provisioning (Disabled in Demo)</CardDescription>
+            <CardTitle>Configuração do Gateway IoT</CardTitle>
+            <CardDescription>Configurações do broker MQTT e provisionamento de dispositivos (Desabilitado no Demo)</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">

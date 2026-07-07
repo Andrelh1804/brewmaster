@@ -9,9 +9,9 @@ export default function NotFound() {
           <div className="rounded-full bg-sidebar-accent p-4 mb-6">
             <FileQuestion className="h-10 w-10 text-primary" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground mb-2">404 - Page Not Found</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground mb-2">404 — Página Não Encontrada</h1>
           <p className="text-muted-foreground">
-            The system could not locate the requested interface or panel. 
+            O sistema não encontrou a interface ou painel solicitado.
           </p>
         </CardContent>
       </Card>

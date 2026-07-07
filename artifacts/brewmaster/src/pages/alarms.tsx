@@ -10,6 +10,13 @@ import { BellRing, Check, ShieldAlert, AlertTriangle, AlertCircle, Info } from "
 import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 
+const PRIORITY_LABELS: Record<string, string> = {
+  critical: "Crítico",
+  high: "Alto",
+  medium: "Médio",
+  low: "Baixo",
+};
+
 export default function Alarms() {
   const { data: alarms, isLoading } = useListAlarms({ query: { refetchInterval: 5000 } });
   const ackAlarm = useAcknowledgeAlarm();
@@ -36,69 +43,71 @@ export default function Alarms() {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-            <BellRing className="w-8 h-8 text-primary" /> Alarms Console
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight flex items-center gap-3">
+            <BellRing className="w-7 h-7 sm:w-8 sm:h-8 text-primary" /> Console de Alarmes
           </h1>
-          <p className="text-muted-foreground text-sm mt-1">System events requiring operator attention.</p>
+          <p className="text-muted-foreground text-sm mt-1">Eventos do sistema que requerem atenção do operador.</p>
         </div>
       </div>
 
       <Card className="bg-sidebar border-border/50 overflow-hidden shadow-xl">
-        <Table>
-          <TableHeader className="bg-background border-b-2 border-border">
-            <TableRow className="hover:bg-transparent">
-              <TableHead className="w-16"></TableHead>
-              <TableHead className="font-bold tracking-widest uppercase text-xs">Timestamp</TableHead>
-              <TableHead className="font-bold tracking-widest uppercase text-xs">Message</TableHead>
-              <TableHead className="font-bold tracking-widest uppercase text-xs">Priority</TableHead>
-              <TableHead className="font-bold tracking-widest uppercase text-xs">Equipment</TableHead>
-              <TableHead className="font-bold tracking-widest uppercase text-xs text-right">Action</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableRow><TableCell colSpan={6} className="text-center py-8">Loading alarms...</TableCell></TableRow>
-            ) : alarms?.length === 0 ? (
-              <TableRow><TableCell colSpan={6} className="text-center py-8 text-muted-foreground">No alarms registered</TableCell></TableRow>
-            ) : alarms?.map(alarm => (
-              <TableRow key={alarm.id} className={`border-border/50 ${!alarm.acknowledged ? 'bg-destructive/5' : 'opacity-60'}`}>
-                <TableCell className="text-center">
-                  <div className={!alarm.acknowledged && alarm.priority === 'critical' ? 'animate-pulse' : ''}>
-                    {getPriorityIcon(alarm.priority)}
-                  </div>
-                </TableCell>
-                <TableCell className="font-mono text-xs whitespace-nowrap">
-                  {format(new Date(alarm.triggeredAt), 'yyyy-MM-dd HH:mm:ss')}
-                </TableCell>
-                <TableCell className={`font-medium ${!alarm.acknowledged ? 'text-foreground' : 'text-muted-foreground'}`}>
-                  {alarm.message}
-                </TableCell>
-                <TableCell>
-                  <Badge variant={alarm.priority === 'critical' ? 'destructive' : alarm.priority === 'high' ? 'warning' : 'outline'} className="uppercase text-[10px]">
-                    {alarm.priority}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-muted-foreground text-sm">
-                  {alarm.equipmentName || '-'}
-                </TableCell>
-                <TableCell className="text-right">
-                  {!alarm.acknowledged ? (
-                    <Button size="sm" variant="outline" className="border-primary/50 text-primary hover:bg-primary/20 hover:text-primary" onClick={() => handleAck(alarm.id)}>
-                      <Check className="w-4 h-4 mr-1" /> Acknowledge
-                    </Button>
-                  ) : (
-                    <span className="text-xs text-muted-foreground flex items-center justify-end gap-1">
-                      <Check className="w-3 h-3" /> Ack'd
-                    </span>
-                  )}
-                </TableCell>
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader className="bg-background border-b-2 border-border">
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="w-12 sm:w-16"></TableHead>
+                <TableHead className="font-bold tracking-widest uppercase text-xs whitespace-nowrap">Data/Hora</TableHead>
+                <TableHead className="font-bold tracking-widest uppercase text-xs">Mensagem</TableHead>
+                <TableHead className="font-bold tracking-widest uppercase text-xs hidden sm:table-cell">Prioridade</TableHead>
+                <TableHead className="font-bold tracking-widest uppercase text-xs hidden md:table-cell">Equipamento</TableHead>
+                <TableHead className="font-bold tracking-widest uppercase text-xs text-right">Ação</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                <TableRow><TableCell colSpan={6} className="text-center py-8">Carregando alarmes...</TableCell></TableRow>
+              ) : alarms?.length === 0 ? (
+                <TableRow><TableCell colSpan={6} className="text-center py-8 text-muted-foreground">Nenhum alarme registrado</TableCell></TableRow>
+              ) : alarms?.map(alarm => (
+                <TableRow key={alarm.id} className={`border-border/50 ${!alarm.acknowledged ? 'bg-destructive/5' : 'opacity-60'}`}>
+                  <TableCell className="text-center">
+                    <div className={!alarm.acknowledged && alarm.priority === 'critical' ? 'animate-pulse' : ''}>
+                      {getPriorityIcon(alarm.priority)}
+                    </div>
+                  </TableCell>
+                  <TableCell className="font-mono text-xs whitespace-nowrap">
+                    {format(new Date(alarm.triggeredAt), 'yyyy-MM-dd HH:mm:ss')}
+                  </TableCell>
+                  <TableCell className={`font-medium ${!alarm.acknowledged ? 'text-foreground' : 'text-muted-foreground'}`}>
+                    {alarm.message}
+                  </TableCell>
+                  <TableCell className="hidden sm:table-cell">
+                    <Badge variant={alarm.priority === 'critical' ? 'destructive' : alarm.priority === 'high' ? 'warning' : 'outline'} className="uppercase text-[10px] whitespace-nowrap">
+                      {PRIORITY_LABELS[alarm.priority] ?? alarm.priority}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground text-sm hidden md:table-cell">
+                    {alarm.equipmentName || '-'}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {!alarm.acknowledged ? (
+                      <Button size="sm" variant="outline" className="border-primary/50 text-primary hover:bg-primary/20 hover:text-primary whitespace-nowrap" onClick={() => handleAck(alarm.id)}>
+                        <Check className="w-4 h-4 sm:mr-1" /> <span className="hidden sm:inline">Reconhecer</span>
+                      </Button>
+                    ) : (
+                      <span className="text-xs text-muted-foreground flex items-center justify-end gap-1 whitespace-nowrap">
+                        <Check className="w-3 h-3" /> Reconhecido
+                      </span>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </Card>
     </div>
   );
