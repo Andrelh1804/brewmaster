@@ -22,6 +22,12 @@ import Settings from '@/pages/settings';
 import Scada from '@/pages/scada';
 import ControlCenter from '@/pages/control-center';
 import Devices from '@/pages/devices';
+import IotDashboard from '@/pages/iot-dashboard';
+import MqttMonitor from '@/pages/mqtt-monitor';
+import TelemetryViewer from '@/pages/telemetry-viewer';
+import CommandCenter from '@/pages/command-center';
+import FirmwareOta from '@/pages/firmware-ota';
+import CommLogs from '@/pages/comm-logs';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -109,6 +115,12 @@ function Router() {
             <Route path="/scada" component={Scada} />
             <Route path="/control" component={ControlCenter} />
             <Route path="/devices" component={Devices} />
+            <Route path="/iot" component={IotDashboard} />
+            <Route path="/mqtt" component={MqttMonitor} />
+            <Route path="/telemetry" component={TelemetryViewer} />
+            <Route path="/commands" component={CommandCenter} />
+            <Route path="/firmware" component={FirmwareOta} />
+            <Route path="/comm-logs" component={CommLogs} />
             <Route component={NotFound} />
           </Switch>
         </main>

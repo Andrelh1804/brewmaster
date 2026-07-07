@@ -12,8 +12,16 @@ import reportsRouter from "./reports";
 import usersRouter from "./users";
 import aiRouter from "./ai";
 import simulatorRouter from "./simulator";
+import esp32SimulatorRouter from "./esp32-simulator";
 import devicesRouter from "./devices";
 import scadaRouter from "./scada";
+import deviceGroupsRouter from "./device-groups";
+import telemetryRouter from "./telemetry";
+import commandsRouter from "./commands";
+import mqttRouter from "./mqtt-routes";
+import firmwareRouter from "./firmware";
+import otaRouter from "./ota";
+import commLogsRouter from "./comm-logs";
 
 const router: IRouter = Router();
 
@@ -30,7 +38,15 @@ router.use(reportsRouter);
 router.use(usersRouter);
 router.use(aiRouter);
 router.use(simulatorRouter);
+router.use(esp32SimulatorRouter);
 router.use(devicesRouter);
 router.use(scadaRouter);
+router.use(deviceGroupsRouter);
+router.use(telemetryRouter);
+router.use(commandsRouter);
+router.use(mqttRouter);
+router.use(firmwareRouter);
+router.use(otaRouter);
+router.use(commLogsRouter);
 
 export default router;

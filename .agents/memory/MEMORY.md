@@ -1,2 +1,3 @@
 - [Drizzle-to-Zod date serialization](drizzle-zod-dates.md) — always call toJSON() before .parse() when Drizzle rows go into OpenAPI-generated Zod schemas
 - [BrewMaster architecture](brewmaster-arch.md) — OpenAPI-first stack: spec → Orval codegen → Zod (server) + React Query hooks (frontend)
+- [aedes v1 MQTT broker](aedes-v1-mqtt.md) — named import + async createBroker; orval schemas config removed to fix duplicate exports

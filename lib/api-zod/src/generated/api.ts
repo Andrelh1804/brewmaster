@@ -1109,11 +1109,19 @@ export const ListDevicesResponseItem = zod.object({
   "name": zod.string(),
   "deviceId": zod.string(),
   "type": zod.enum(['esp32', 'sensor_node', 'actuator_node', 'gateway', 'controller']),
+  "model": zod.string().nullish(),
+  "serialNumber": zod.string().nullish(),
   "ipAddress": zod.string().nullish(),
   "firmwareVersion": zod.string().nullish(),
   "status": zod.enum(['online', 'offline', 'error', 'unknown']),
   "lastHeartbeat": zod.string().nullish(),
   "rssi": zod.number().nullish(),
+  "uptime": zod.number().nullish(),
+  "groupId": zod.number().nullish(),
+  "plant": zod.string().nullish(),
+  "sector": zod.string().nullish(),
+  "uplinkCount": zod.number(),
+  "downlinkCount": zod.number(),
   "location": zod.string().nullish(),
   "notes": zod.string().nullish(),
   "createdAt": zod.string()
@@ -1128,8 +1136,13 @@ export const CreateDeviceBody = zod.object({
   "name": zod.string(),
   "deviceId": zod.string(),
   "type": zod.enum(['esp32', 'sensor_node', 'actuator_node', 'gateway', 'controller']),
+  "model": zod.string().optional(),
+  "serialNumber": zod.string().optional(),
   "ipAddress": zod.string().optional(),
   "firmwareVersion": zod.string().optional(),
+  "groupId": zod.number().optional(),
+  "plant": zod.string().optional(),
+  "sector": zod.string().optional(),
   "location": zod.string().optional(),
   "notes": zod.string().optional()
 })
@@ -1139,11 +1152,19 @@ export const CreateDeviceResponse = zod.object({
   "name": zod.string(),
   "deviceId": zod.string(),
   "type": zod.enum(['esp32', 'sensor_node', 'actuator_node', 'gateway', 'controller']),
+  "model": zod.string().nullish(),
+  "serialNumber": zod.string().nullish(),
   "ipAddress": zod.string().nullish(),
   "firmwareVersion": zod.string().nullish(),
   "status": zod.enum(['online', 'offline', 'error', 'unknown']),
   "lastHeartbeat": zod.string().nullish(),
   "rssi": zod.number().nullish(),
+  "uptime": zod.number().nullish(),
+  "groupId": zod.number().nullish(),
+  "plant": zod.string().nullish(),
+  "sector": zod.string().nullish(),
+  "uplinkCount": zod.number(),
+  "downlinkCount": zod.number(),
   "location": zod.string().nullish(),
   "notes": zod.string().nullish(),
   "createdAt": zod.string()
@@ -1162,11 +1183,19 @@ export const GetDeviceResponse = zod.object({
   "name": zod.string(),
   "deviceId": zod.string(),
   "type": zod.enum(['esp32', 'sensor_node', 'actuator_node', 'gateway', 'controller']),
+  "model": zod.string().nullish(),
+  "serialNumber": zod.string().nullish(),
   "ipAddress": zod.string().nullish(),
   "firmwareVersion": zod.string().nullish(),
   "status": zod.enum(['online', 'offline', 'error', 'unknown']),
   "lastHeartbeat": zod.string().nullish(),
   "rssi": zod.number().nullish(),
+  "uptime": zod.number().nullish(),
+  "groupId": zod.number().nullish(),
+  "plant": zod.string().nullish(),
+  "sector": zod.string().nullish(),
+  "uplinkCount": zod.number(),
+  "downlinkCount": zod.number(),
   "location": zod.string().nullish(),
   "notes": zod.string().nullish(),
   "createdAt": zod.string()
@@ -1183,9 +1212,14 @@ export const UpdateDeviceParams = zod.object({
 export const UpdateDeviceBody = zod.object({
   "name": zod.string().optional(),
   "type": zod.enum(['esp32', 'sensor_node', 'actuator_node', 'gateway', 'controller']).optional(),
+  "model": zod.string().optional(),
+  "serialNumber": zod.string().optional(),
   "ipAddress": zod.string().optional(),
   "firmwareVersion": zod.string().optional(),
   "status": zod.enum(['online', 'offline', 'error', 'unknown']).optional(),
+  "groupId": zod.number().optional(),
+  "plant": zod.string().optional(),
+  "sector": zod.string().optional(),
   "location": zod.string().optional(),
   "notes": zod.string().optional()
 })
@@ -1195,11 +1229,19 @@ export const UpdateDeviceResponse = zod.object({
   "name": zod.string(),
   "deviceId": zod.string(),
   "type": zod.enum(['esp32', 'sensor_node', 'actuator_node', 'gateway', 'controller']),
+  "model": zod.string().nullish(),
+  "serialNumber": zod.string().nullish(),
   "ipAddress": zod.string().nullish(),
   "firmwareVersion": zod.string().nullish(),
   "status": zod.enum(['online', 'offline', 'error', 'unknown']),
   "lastHeartbeat": zod.string().nullish(),
   "rssi": zod.number().nullish(),
+  "uptime": zod.number().nullish(),
+  "groupId": zod.number().nullish(),
+  "plant": zod.string().nullish(),
+  "sector": zod.string().nullish(),
+  "uplinkCount": zod.number(),
+  "downlinkCount": zod.number(),
   "location": zod.string().nullish(),
   "notes": zod.string().nullish(),
   "createdAt": zod.string()
@@ -1226,7 +1268,8 @@ export const DeviceHeartbeatParams = zod.object({
 export const DeviceHeartbeatBody = zod.object({
   "ipAddress": zod.string().optional(),
   "firmwareVersion": zod.string().optional(),
-  "rssi": zod.number().optional()
+  "rssi": zod.number().optional(),
+  "uptime": zod.number().optional()
 })
 
 export const DeviceHeartbeatResponse = zod.object({
@@ -1234,14 +1277,520 @@ export const DeviceHeartbeatResponse = zod.object({
   "name": zod.string(),
   "deviceId": zod.string(),
   "type": zod.enum(['esp32', 'sensor_node', 'actuator_node', 'gateway', 'controller']),
+  "model": zod.string().nullish(),
+  "serialNumber": zod.string().nullish(),
   "ipAddress": zod.string().nullish(),
   "firmwareVersion": zod.string().nullish(),
   "status": zod.enum(['online', 'offline', 'error', 'unknown']),
   "lastHeartbeat": zod.string().nullish(),
   "rssi": zod.number().nullish(),
+  "uptime": zod.number().nullish(),
+  "groupId": zod.number().nullish(),
+  "plant": zod.string().nullish(),
+  "sector": zod.string().nullish(),
+  "uplinkCount": zod.number(),
+  "downlinkCount": zod.number(),
   "location": zod.string().nullish(),
   "notes": zod.string().nullish(),
   "createdAt": zod.string()
+})
+
+
+/**
+ * @summary List all device groups
+ */
+export const ListDeviceGroupsResponseItem = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "plant": zod.string().nullish(),
+  "sector": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+export const ListDeviceGroupsResponse = zod.array(ListDeviceGroupsResponseItem)
+
+
+/**
+ * @summary Create a device group
+ */
+export const CreateDeviceGroupBody = zod.object({
+  "name": zod.string(),
+  "plant": zod.string().optional(),
+  "sector": zod.string().optional(),
+  "description": zod.string().optional()
+})
+
+export const CreateDeviceGroupResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "plant": zod.string().nullish(),
+  "sector": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Get a device group by ID
+ */
+export const GetDeviceGroupParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const GetDeviceGroupResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "plant": zod.string().nullish(),
+  "sector": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Update a device group
+ */
+export const UpdateDeviceGroupParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateDeviceGroupBody = zod.object({
+  "name": zod.string().optional(),
+  "plant": zod.string().optional(),
+  "sector": zod.string().optional(),
+  "description": zod.string().optional()
+})
+
+export const UpdateDeviceGroupResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "plant": zod.string().nullish(),
+  "sector": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Delete a device group
+ */
+export const DeleteDeviceGroupParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const DeleteDeviceGroupResponse = zod.void()
+
+
+/**
+ * @summary Get recent telemetry for a device
+ */
+export const GetDeviceTelemetryParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const getDeviceTelemetryQueryLimitDefault = 100;
+
+export const GetDeviceTelemetryQueryParams = zod.object({
+  "limit": zod.coerce.number().default(getDeviceTelemetryQueryLimitDefault)
+})
+
+export const GetDeviceTelemetryResponseItem = zod.object({
+  "id": zod.number(),
+  "deviceId": zod.number(),
+  "temperature": zod.number().nullish(),
+  "pressure": zod.number().nullish(),
+  "ph": zod.number().nullish(),
+  "flow": zod.number().nullish(),
+  "volume": zod.number().nullish(),
+  "density": zod.number().nullish(),
+  "pumpState": zod.boolean().nullish(),
+  "valveState": zod.boolean().nullish(),
+  "resistanceState": zod.boolean().nullish(),
+  "rssi": zod.number().nullish(),
+  "heap": zod.number().nullish(),
+  "uptime": zod.number().nullish(),
+  "timestamp": zod.string()
+})
+export const GetDeviceTelemetryResponse = zod.array(GetDeviceTelemetryResponseItem)
+
+
+/**
+ * @summary List commands sent to a device
+ */
+export const ListDeviceCommandsParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const ListDeviceCommandsResponseItem = zod.object({
+  "id": zod.number(),
+  "deviceId": zod.number(),
+  "command": zod.string(),
+  "params": zod.string().nullish(),
+  "status": zod.enum(['pending', 'sent', 'acknowledged', 'failed', 'timeout']),
+  "sentAt": zod.string(),
+  "acknowledgedAt": zod.string().nullish(),
+  "response": zod.string().nullish(),
+  "error": zod.string().nullish()
+})
+export const ListDeviceCommandsResponse = zod.array(ListDeviceCommandsResponseItem)
+
+
+/**
+ * @summary Send a command to a device
+ */
+export const SendDeviceCommandParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const SendDeviceCommandBody = zod.object({
+  "command": zod.enum(['start_production', 'pause', 'resume', 'cancel', 'set_setpoint', 'set_time', 'pump_on', 'pump_off', 'valve_open', 'valve_close', 'resistance_on', 'resistance_off', 'restart', 'ota_update', 'sync']),
+  "params": zod.string().optional()
+})
+
+export const SendDeviceCommandResponse = zod.object({
+  "id": zod.number(),
+  "deviceId": zod.number(),
+  "command": zod.string(),
+  "params": zod.string().nullish(),
+  "status": zod.enum(['pending', 'sent', 'acknowledged', 'failed', 'timeout']),
+  "sentAt": zod.string(),
+  "acknowledgedAt": zod.string().nullish(),
+  "response": zod.string().nullish(),
+  "error": zod.string().nullish()
+})
+
+
+/**
+ * @summary Get a specific command by ID
+ */
+export const GetDeviceCommandParams = zod.object({
+  "id": zod.coerce.number(),
+  "cmdId": zod.coerce.number()
+})
+
+export const GetDeviceCommandResponse = zod.object({
+  "id": zod.number(),
+  "deviceId": zod.number(),
+  "command": zod.string(),
+  "params": zod.string().nullish(),
+  "status": zod.enum(['pending', 'sent', 'acknowledged', 'failed', 'timeout']),
+  "sentAt": zod.string(),
+  "acknowledgedAt": zod.string().nullish(),
+  "response": zod.string().nullish(),
+  "error": zod.string().nullish()
+})
+
+
+/**
+ * @summary Get communication logs for a device
+ */
+export const GetDeviceCommLogsParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const getDeviceCommLogsQueryLimitDefault = 100;
+
+export const GetDeviceCommLogsQueryParams = zod.object({
+  "limit": zod.coerce.number().default(getDeviceCommLogsQueryLimitDefault)
+})
+
+export const GetDeviceCommLogsResponseItem = zod.object({
+  "id": zod.number(),
+  "deviceId": zod.number().nullish(),
+  "deviceIdentifier": zod.string().nullish(),
+  "event": zod.string(),
+  "details": zod.string().nullish(),
+  "timestamp": zod.string()
+})
+export const GetDeviceCommLogsResponse = zod.array(GetDeviceCommLogsResponseItem)
+
+
+/**
+ * @summary List all communication logs
+ */
+export const listCommLogsQueryLimitDefault = 200;
+
+export const ListCommLogsQueryParams = zod.object({
+  "limit": zod.coerce.number().default(listCommLogsQueryLimitDefault)
+})
+
+export const ListCommLogsResponseItem = zod.object({
+  "id": zod.number(),
+  "deviceId": zod.number().nullish(),
+  "deviceIdentifier": zod.string().nullish(),
+  "event": zod.string(),
+  "details": zod.string().nullish(),
+  "timestamp": zod.string()
+})
+export const ListCommLogsResponse = zod.array(ListCommLogsResponseItem)
+
+
+/**
+ * @summary Get MQTT broker status and statistics
+ */
+export const GetMqttStatusResponse = zod.object({
+  "running": zod.boolean(),
+  "clientCount": zod.number(),
+  "connectedDevices": zod.array(zod.string()).optional(),
+  "totalMessages": zod.number(),
+  "uplinkMessages": zod.number().optional(),
+  "downlinkMessages": zod.number().optional(),
+  "uptime": zod.number()
+})
+
+
+/**
+ * @summary List recent MQTT messages
+ */
+export const listMqttMessagesQueryLimitDefault = 100;
+
+export const ListMqttMessagesQueryParams = zod.object({
+  "limit": zod.coerce.number().default(listMqttMessagesQueryLimitDefault),
+  "deviceId": zod.coerce.string().optional()
+})
+
+export const ListMqttMessagesResponseItem = zod.object({
+  "id": zod.number(),
+  "deviceId": zod.number().nullish(),
+  "deviceIdentifier": zod.string().nullish(),
+  "topic": zod.string(),
+  "payload": zod.string().nullish(),
+  "direction": zod.enum(['inbound', 'outbound']),
+  "qos": zod.number().optional(),
+  "timestamp": zod.string()
+})
+export const ListMqttMessagesResponse = zod.array(ListMqttMessagesResponseItem)
+
+
+/**
+ * @summary List all firmware versions
+ */
+export const ListFirmwareVersionsResponseItem = zod.object({
+  "id": zod.number(),
+  "version": zod.string(),
+  "description": zod.string().nullish(),
+  "url": zod.string().nullish(),
+  "checksum": zod.string().nullish(),
+  "size": zod.number().nullish(),
+  "stable": zod.boolean(),
+  "releaseDate": zod.string(),
+  "createdAt": zod.string()
+})
+export const ListFirmwareVersionsResponse = zod.array(ListFirmwareVersionsResponseItem)
+
+
+/**
+ * @summary Register a new firmware version
+ */
+export const CreateFirmwareVersionBody = zod.object({
+  "version": zod.string(),
+  "description": zod.string().optional(),
+  "url": zod.string().optional(),
+  "checksum": zod.string().optional(),
+  "size": zod.number().optional(),
+  "stable": zod.boolean().optional()
+})
+
+export const CreateFirmwareVersionResponse = zod.object({
+  "id": zod.number(),
+  "version": zod.string(),
+  "description": zod.string().nullish(),
+  "url": zod.string().nullish(),
+  "checksum": zod.string().nullish(),
+  "size": zod.number().nullish(),
+  "stable": zod.boolean(),
+  "releaseDate": zod.string(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Get a firmware version by ID
+ */
+export const GetFirmwareVersionParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const GetFirmwareVersionResponse = zod.object({
+  "id": zod.number(),
+  "version": zod.string(),
+  "description": zod.string().nullish(),
+  "url": zod.string().nullish(),
+  "checksum": zod.string().nullish(),
+  "size": zod.number().nullish(),
+  "stable": zod.boolean(),
+  "releaseDate": zod.string(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Delete a firmware version
+ */
+export const DeleteFirmwareVersionParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const DeleteFirmwareVersionResponse = zod.void()
+
+
+/**
+ * @summary List all OTA jobs
+ */
+export const ListOtaJobsResponseItem = zod.object({
+  "id": zod.number(),
+  "deviceId": zod.number(),
+  "firmwareVersionId": zod.number().nullish(),
+  "targetVersion": zod.string(),
+  "status": zod.enum(['pending', 'downloading', 'installing', 'completed', 'failed', 'cancelled']),
+  "progress": zod.number(),
+  "error": zod.string().nullish(),
+  "startedAt": zod.string(),
+  "completedAt": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+export const ListOtaJobsResponse = zod.array(ListOtaJobsResponseItem)
+
+
+/**
+ * @summary Trigger an OTA firmware update for a device
+ */
+export const TriggerOtaUpdateParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const TriggerOtaUpdateBody = zod.object({
+  "targetVersion": zod.string(),
+  "firmwareVersionId": zod.number().optional()
+})
+
+export const TriggerOtaUpdateResponse = zod.object({
+  "id": zod.number(),
+  "deviceId": zod.number(),
+  "firmwareVersionId": zod.number().nullish(),
+  "targetVersion": zod.string(),
+  "status": zod.enum(['pending', 'downloading', 'installing', 'completed', 'failed', 'cancelled']),
+  "progress": zod.number(),
+  "error": zod.string().nullish(),
+  "startedAt": zod.string(),
+  "completedAt": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Get an OTA job by ID
+ */
+export const GetOtaJobParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const GetOtaJobResponse = zod.object({
+  "id": zod.number(),
+  "deviceId": zod.number(),
+  "firmwareVersionId": zod.number().nullish(),
+  "targetVersion": zod.string(),
+  "status": zod.enum(['pending', 'downloading', 'installing', 'completed', 'failed', 'cancelled']),
+  "progress": zod.number(),
+  "error": zod.string().nullish(),
+  "startedAt": zod.string(),
+  "completedAt": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Cancel a pending OTA job
+ */
+export const CancelOtaJobParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const CancelOtaJobResponse = zod.object({
+  "id": zod.number(),
+  "deviceId": zod.number(),
+  "firmwareVersionId": zod.number().nullish(),
+  "targetVersion": zod.string(),
+  "status": zod.enum(['pending', 'downloading', 'installing', 'completed', 'failed', 'cancelled']),
+  "progress": zod.number(),
+  "error": zod.string().nullish(),
+  "startedAt": zod.string(),
+  "completedAt": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Start the ESP32 MQTT simulator
+ */
+export const StartEsp32SimulatorBody = zod.object({
+  "tickIntervalMs": zod.number().optional(),
+  "deviceIds": zod.array(zod.string()).optional()
+})
+
+export const StartEsp32SimulatorResponse = zod.object({
+  "running": zod.boolean(),
+  "deviceCount": zod.number(),
+  "tickIntervalMs": zod.number(),
+  "totalTicks": zod.number(),
+  "devices": zod.array(zod.object({
+  "deviceId": zod.string(),
+  "name": zod.string(),
+  "status": zod.string()
+})).optional()
+})
+
+
+/**
+ * @summary Stop the ESP32 MQTT simulator
+ */
+export const StopEsp32SimulatorResponse = zod.object({
+  "running": zod.boolean(),
+  "deviceCount": zod.number(),
+  "tickIntervalMs": zod.number(),
+  "totalTicks": zod.number(),
+  "devices": zod.array(zod.object({
+  "deviceId": zod.string(),
+  "name": zod.string(),
+  "status": zod.string()
+})).optional()
+})
+
+
+/**
+ * @summary Get ESP32 simulator status
+ */
+export const GetEsp32SimulatorStatusResponse = zod.object({
+  "running": zod.boolean(),
+  "deviceCount": zod.number(),
+  "tickIntervalMs": zod.number(),
+  "totalTicks": zod.number(),
+  "devices": zod.array(zod.object({
+  "deviceId": zod.string(),
+  "name": zod.string(),
+  "status": zod.string()
+})).optional()
+})
+
+
+/**
+ * @summary Configure ESP32 simulator parameters
+ */
+export const ConfigureEsp32SimulatorBody = zod.object({
+  "tickIntervalMs": zod.number().optional(),
+  "deviceIds": zod.array(zod.string()).optional()
+})
+
+export const ConfigureEsp32SimulatorResponse = zod.object({
+  "running": zod.boolean(),
+  "deviceCount": zod.number(),
+  "tickIntervalMs": zod.number(),
+  "totalTicks": zod.number(),
+  "devices": zod.array(zod.object({
+  "deviceId": zod.string(),
+  "name": zod.string(),
+  "status": zod.string()
+})).optional()
 })
 
 

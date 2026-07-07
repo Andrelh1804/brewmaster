@@ -773,6 +773,10 @@ export interface Device {
   deviceId: string;
   type: DeviceType;
   /** @nullable */
+  model?: string | null;
+  /** @nullable */
+  serialNumber?: string | null;
+  /** @nullable */
   ipAddress?: string | null;
   /** @nullable */
   firmwareVersion?: string | null;
@@ -781,6 +785,16 @@ export interface Device {
   lastHeartbeat?: string | null;
   /** @nullable */
   rssi?: number | null;
+  /** @nullable */
+  uptime?: number | null;
+  /** @nullable */
+  groupId?: number | null;
+  /** @nullable */
+  plant?: string | null;
+  /** @nullable */
+  sector?: string | null;
+  uplinkCount: number;
+  downlinkCount: number;
   /** @nullable */
   location?: string | null;
   /** @nullable */
@@ -803,8 +817,13 @@ export interface DeviceInput {
   name: string;
   deviceId: string;
   type: DeviceInputType;
+  model?: string;
+  serialNumber?: string;
   ipAddress?: string;
   firmwareVersion?: string;
+  groupId?: number;
+  plant?: string;
+  sector?: string;
   location?: string;
   notes?: string;
 }
@@ -833,9 +852,14 @@ export const DeviceUpdateStatus = {
 export interface DeviceUpdate {
   name?: string;
   type?: DeviceUpdateType;
+  model?: string;
+  serialNumber?: string;
   ipAddress?: string;
   firmwareVersion?: string;
   status?: DeviceUpdateStatus;
+  groupId?: number;
+  plant?: string;
+  sector?: string;
   location?: string;
   notes?: string;
 }
@@ -844,5 +868,253 @@ export interface DeviceHeartbeatInput {
   ipAddress?: string;
   firmwareVersion?: string;
   rssi?: number;
+  uptime?: number;
 }
+
+export interface DeviceGroup {
+  id: number;
+  name: string;
+  /** @nullable */
+  plant?: string | null;
+  /** @nullable */
+  sector?: string | null;
+  /** @nullable */
+  description?: string | null;
+  createdAt: string;
+}
+
+export interface DeviceGroupInput {
+  name: string;
+  plant?: string;
+  sector?: string;
+  description?: string;
+}
+
+export interface DeviceGroupUpdate {
+  name?: string;
+  plant?: string;
+  sector?: string;
+  description?: string;
+}
+
+export type DeviceCommandStatus = typeof DeviceCommandStatus[keyof typeof DeviceCommandStatus];
+
+
+export const DeviceCommandStatus = {
+  pending: 'pending',
+  sent: 'sent',
+  acknowledged: 'acknowledged',
+  failed: 'failed',
+  timeout: 'timeout',
+} as const;
+
+export interface DeviceCommand {
+  id: number;
+  deviceId: number;
+  command: string;
+  /** @nullable */
+  params?: string | null;
+  status: DeviceCommandStatus;
+  sentAt: string;
+  /** @nullable */
+  acknowledgedAt?: string | null;
+  /** @nullable */
+  response?: string | null;
+  /** @nullable */
+  error?: string | null;
+}
+
+export type DeviceCommandInputCommand = typeof DeviceCommandInputCommand[keyof typeof DeviceCommandInputCommand];
+
+
+export const DeviceCommandInputCommand = {
+  start_production: 'start_production',
+  pause: 'pause',
+  resume: 'resume',
+  cancel: 'cancel',
+  set_setpoint: 'set_setpoint',
+  set_time: 'set_time',
+  pump_on: 'pump_on',
+  pump_off: 'pump_off',
+  valve_open: 'valve_open',
+  valve_close: 'valve_close',
+  resistance_on: 'resistance_on',
+  resistance_off: 'resistance_off',
+  restart: 'restart',
+  ota_update: 'ota_update',
+  sync: 'sync',
+} as const;
+
+export interface DeviceCommandInput {
+  command: DeviceCommandInputCommand;
+  params?: string;
+}
+
+export interface TelemetryPoint {
+  id: number;
+  deviceId: number;
+  /** @nullable */
+  temperature?: number | null;
+  /** @nullable */
+  pressure?: number | null;
+  /** @nullable */
+  ph?: number | null;
+  /** @nullable */
+  flow?: number | null;
+  /** @nullable */
+  volume?: number | null;
+  /** @nullable */
+  density?: number | null;
+  /** @nullable */
+  pumpState?: boolean | null;
+  /** @nullable */
+  valveState?: boolean | null;
+  /** @nullable */
+  resistanceState?: boolean | null;
+  /** @nullable */
+  rssi?: number | null;
+  /** @nullable */
+  heap?: number | null;
+  /** @nullable */
+  uptime?: number | null;
+  timestamp: string;
+}
+
+export interface MqttBrokerStatus {
+  running: boolean;
+  clientCount: number;
+  connectedDevices?: string[];
+  totalMessages: number;
+  uplinkMessages?: number;
+  downlinkMessages?: number;
+  uptime: number;
+}
+
+export type MqttMessageRecordDirection = typeof MqttMessageRecordDirection[keyof typeof MqttMessageRecordDirection];
+
+
+export const MqttMessageRecordDirection = {
+  inbound: 'inbound',
+  outbound: 'outbound',
+} as const;
+
+export interface MqttMessageRecord {
+  id: number;
+  /** @nullable */
+  deviceId?: number | null;
+  /** @nullable */
+  deviceIdentifier?: string | null;
+  topic: string;
+  /** @nullable */
+  payload?: string | null;
+  direction: MqttMessageRecordDirection;
+  qos?: number;
+  timestamp: string;
+}
+
+export interface FirmwareVersion {
+  id: number;
+  version: string;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  url?: string | null;
+  /** @nullable */
+  checksum?: string | null;
+  /** @nullable */
+  size?: number | null;
+  stable: boolean;
+  releaseDate: string;
+  createdAt: string;
+}
+
+export interface FirmwareVersionInput {
+  version: string;
+  description?: string;
+  url?: string;
+  checksum?: string;
+  size?: number;
+  stable?: boolean;
+}
+
+export type OtaJobStatus = typeof OtaJobStatus[keyof typeof OtaJobStatus];
+
+
+export const OtaJobStatus = {
+  pending: 'pending',
+  downloading: 'downloading',
+  installing: 'installing',
+  completed: 'completed',
+  failed: 'failed',
+  cancelled: 'cancelled',
+} as const;
+
+export interface OtaJob {
+  id: number;
+  deviceId: number;
+  /** @nullable */
+  firmwareVersionId?: number | null;
+  targetVersion: string;
+  status: OtaJobStatus;
+  progress: number;
+  /** @nullable */
+  error?: string | null;
+  startedAt: string;
+  /** @nullable */
+  completedAt?: string | null;
+  createdAt: string;
+}
+
+export interface OtaJobInput {
+  targetVersion: string;
+  firmwareVersionId?: number;
+}
+
+export interface CommunicationLog {
+  id: number;
+  /** @nullable */
+  deviceId?: number | null;
+  /** @nullable */
+  deviceIdentifier?: string | null;
+  event: string;
+  /** @nullable */
+  details?: string | null;
+  timestamp: string;
+}
+
+export type Esp32SimulatorStatusDevicesItem = {
+  deviceId: string;
+  name: string;
+  status: string;
+};
+
+export interface Esp32SimulatorStatus {
+  running: boolean;
+  deviceCount: number;
+  tickIntervalMs: number;
+  totalTicks: number;
+  devices?: Esp32SimulatorStatusDevicesItem[];
+}
+
+export interface Esp32SimulatorConfig {
+  tickIntervalMs?: number;
+  deviceIds?: string[];
+}
+
+export type GetDeviceTelemetryParams = {
+limit?: number;
+};
+
+export type GetDeviceCommLogsParams = {
+limit?: number;
+};
+
+export type ListCommLogsParams = {
+limit?: number;
+};
+
+export type ListMqttMessagesParams = {
+limit?: number;
+deviceId?: string;
+};
 

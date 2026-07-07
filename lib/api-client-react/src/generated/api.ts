@@ -29,17 +29,35 @@ import type {
   Alarm,
   AlarmInput,
   AlarmReport,
+  CommunicationLog,
   DashboardOverview,
   Device,
+  DeviceCommand,
+  DeviceCommandInput,
+  DeviceGroup,
+  DeviceGroupInput,
+  DeviceGroupUpdate,
   DeviceHeartbeatInput,
   DeviceInput,
   DeviceUpdate,
   Equipment,
   EquipmentInput,
   EquipmentUpdate,
+  Esp32SimulatorConfig,
+  Esp32SimulatorStatus,
   Event,
+  FirmwareVersion,
+  FirmwareVersionInput,
+  GetDeviceCommLogsParams,
+  GetDeviceTelemetryParams,
   HealthStatus,
   IndustrialMetrics,
+  ListCommLogsParams,
+  ListMqttMessagesParams,
+  MqttBrokerStatus,
+  MqttMessageRecord,
+  OtaJob,
+  OtaJobInput,
   Production,
   ProductionInput,
   ProductionNoteInput,
@@ -53,6 +71,7 @@ import type {
   SensorInput,
   SensorReading,
   SensorUpdate,
+  TelemetryPoint,
   User,
   UserInput,
   UserUpdate
@@ -4199,6 +4218,1900 @@ export const useDeviceHeartbeat = <TError = ErrorType<unknown>,
         TContext
       > => {
       return useMutation(getDeviceHeartbeatMutationOptions(options));
+    }
+
+export const getListDeviceGroupsUrl = () => {
+
+
+
+
+  return `/api/device-groups`
+}
+
+/**
+ * @summary List all device groups
+ */
+export const listDeviceGroups = async ( options?: RequestInit): Promise<DeviceGroup[]> => {
+
+  return customFetch<DeviceGroup[]>(getListDeviceGroupsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListDeviceGroupsQueryKey = () => {
+    return [
+    `/api/device-groups`
+    ] as const;
+    }
+
+
+export const getListDeviceGroupsQueryOptions = <TData = Awaited<ReturnType<typeof listDeviceGroups>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listDeviceGroups>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListDeviceGroupsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listDeviceGroups>>> = ({ signal }) => listDeviceGroups({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listDeviceGroups>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListDeviceGroupsQueryResult = NonNullable<Awaited<ReturnType<typeof listDeviceGroups>>>
+export type ListDeviceGroupsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List all device groups
+ */
+
+export function useListDeviceGroups<TData = Awaited<ReturnType<typeof listDeviceGroups>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listDeviceGroups>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListDeviceGroupsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getCreateDeviceGroupUrl = () => {
+
+
+
+
+  return `/api/device-groups`
+}
+
+/**
+ * @summary Create a device group
+ */
+export const createDeviceGroup = async (deviceGroupInput: DeviceGroupInput, options?: RequestInit): Promise<DeviceGroup> => {
+
+  return customFetch<DeviceGroup>(getCreateDeviceGroupUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(deviceGroupInput)
+  }
+);}
+
+
+
+
+export const getCreateDeviceGroupMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDeviceGroup>>, TError,{data: BodyType<DeviceGroupInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createDeviceGroup>>, TError,{data: BodyType<DeviceGroupInput>}, TContext> => {
+
+const mutationKey = ['createDeviceGroup'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createDeviceGroup>>, {data: BodyType<DeviceGroupInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createDeviceGroup(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateDeviceGroupMutationResult = NonNullable<Awaited<ReturnType<typeof createDeviceGroup>>>
+    export type CreateDeviceGroupMutationBody = BodyType<DeviceGroupInput>
+    export type CreateDeviceGroupMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Create a device group
+ */
+export const useCreateDeviceGroup = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDeviceGroup>>, TError,{data: BodyType<DeviceGroupInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createDeviceGroup>>,
+        TError,
+        {data: BodyType<DeviceGroupInput>},
+        TContext
+      > => {
+      return useMutation(getCreateDeviceGroupMutationOptions(options));
+    }
+
+export const getGetDeviceGroupUrl = (id: number,) => {
+
+
+
+
+  return `/api/device-groups/${id}`
+}
+
+/**
+ * @summary Get a device group by ID
+ */
+export const getDeviceGroup = async (id: number, options?: RequestInit): Promise<DeviceGroup> => {
+
+  return customFetch<DeviceGroup>(getGetDeviceGroupUrl(id),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetDeviceGroupQueryKey = (id: number,) => {
+    return [
+    `/api/device-groups/${id}`
+    ] as const;
+    }
+
+
+export const getGetDeviceGroupQueryOptions = <TData = Awaited<ReturnType<typeof getDeviceGroup>>, TError = ErrorType<void>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getDeviceGroup>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDeviceGroupQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDeviceGroup>>> = ({ signal }) => getDeviceGroup(id, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDeviceGroup>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetDeviceGroupQueryResult = NonNullable<Awaited<ReturnType<typeof getDeviceGroup>>>
+export type GetDeviceGroupQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get a device group by ID
+ */
+
+export function useGetDeviceGroup<TData = Awaited<ReturnType<typeof getDeviceGroup>>, TError = ErrorType<void>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getDeviceGroup>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetDeviceGroupQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getUpdateDeviceGroupUrl = (id: number,) => {
+
+
+
+
+  return `/api/device-groups/${id}`
+}
+
+/**
+ * @summary Update a device group
+ */
+export const updateDeviceGroup = async (id: number,
+    deviceGroupUpdate: DeviceGroupUpdate, options?: RequestInit): Promise<DeviceGroup> => {
+
+  return customFetch<DeviceGroup>(getUpdateDeviceGroupUrl(id),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(deviceGroupUpdate)
+  }
+);}
+
+
+
+
+export const getUpdateDeviceGroupMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDeviceGroup>>, TError,{id: number;data: BodyType<DeviceGroupUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateDeviceGroup>>, TError,{id: number;data: BodyType<DeviceGroupUpdate>}, TContext> => {
+
+const mutationKey = ['updateDeviceGroup'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDeviceGroup>>, {id: number;data: BodyType<DeviceGroupUpdate>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateDeviceGroup(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateDeviceGroupMutationResult = NonNullable<Awaited<ReturnType<typeof updateDeviceGroup>>>
+    export type UpdateDeviceGroupMutationBody = BodyType<DeviceGroupUpdate>
+    export type UpdateDeviceGroupMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Update a device group
+ */
+export const useUpdateDeviceGroup = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDeviceGroup>>, TError,{id: number;data: BodyType<DeviceGroupUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updateDeviceGroup>>,
+        TError,
+        {id: number;data: BodyType<DeviceGroupUpdate>},
+        TContext
+      > => {
+      return useMutation(getUpdateDeviceGroupMutationOptions(options));
+    }
+
+export const getDeleteDeviceGroupUrl = (id: number,) => {
+
+
+
+
+  return `/api/device-groups/${id}`
+}
+
+/**
+ * @summary Delete a device group
+ */
+export const deleteDeviceGroup = async (id: number, options?: RequestInit): Promise<void> => {
+
+  return customFetch<void>(getDeleteDeviceGroupUrl(id),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+export const getDeleteDeviceGroupMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDeviceGroup>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteDeviceGroup>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteDeviceGroup'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteDeviceGroup>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteDeviceGroup(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteDeviceGroupMutationResult = NonNullable<Awaited<ReturnType<typeof deleteDeviceGroup>>>
+
+    export type DeleteDeviceGroupMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Delete a device group
+ */
+export const useDeleteDeviceGroup = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDeviceGroup>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteDeviceGroup>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getDeleteDeviceGroupMutationOptions(options));
+    }
+
+export const getGetDeviceTelemetryUrl = (id: number,
+    params?: GetDeviceTelemetryParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/devices/${id}/telemetry?${stringifiedParams}` : `/api/devices/${id}/telemetry`
+}
+
+/**
+ * @summary Get recent telemetry for a device
+ */
+export const getDeviceTelemetry = async (id: number,
+    params?: GetDeviceTelemetryParams, options?: RequestInit): Promise<TelemetryPoint[]> => {
+
+  return customFetch<TelemetryPoint[]>(getGetDeviceTelemetryUrl(id,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetDeviceTelemetryQueryKey = (id: number,
+    params?: GetDeviceTelemetryParams,) => {
+    return [
+    `/api/devices/${id}/telemetry`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetDeviceTelemetryQueryOptions = <TData = Awaited<ReturnType<typeof getDeviceTelemetry>>, TError = ErrorType<unknown>>(id: number,
+    params?: GetDeviceTelemetryParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getDeviceTelemetry>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDeviceTelemetryQueryKey(id,params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDeviceTelemetry>>> = ({ signal }) => getDeviceTelemetry(id,params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDeviceTelemetry>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetDeviceTelemetryQueryResult = NonNullable<Awaited<ReturnType<typeof getDeviceTelemetry>>>
+export type GetDeviceTelemetryQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get recent telemetry for a device
+ */
+
+export function useGetDeviceTelemetry<TData = Awaited<ReturnType<typeof getDeviceTelemetry>>, TError = ErrorType<unknown>>(
+ id: number,
+    params?: GetDeviceTelemetryParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getDeviceTelemetry>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetDeviceTelemetryQueryOptions(id,params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getListDeviceCommandsUrl = (id: number,) => {
+
+
+
+
+  return `/api/devices/${id}/commands`
+}
+
+/**
+ * @summary List commands sent to a device
+ */
+export const listDeviceCommands = async (id: number, options?: RequestInit): Promise<DeviceCommand[]> => {
+
+  return customFetch<DeviceCommand[]>(getListDeviceCommandsUrl(id),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListDeviceCommandsQueryKey = (id: number,) => {
+    return [
+    `/api/devices/${id}/commands`
+    ] as const;
+    }
+
+
+export const getListDeviceCommandsQueryOptions = <TData = Awaited<ReturnType<typeof listDeviceCommands>>, TError = ErrorType<unknown>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listDeviceCommands>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListDeviceCommandsQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listDeviceCommands>>> = ({ signal }) => listDeviceCommands(id, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listDeviceCommands>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListDeviceCommandsQueryResult = NonNullable<Awaited<ReturnType<typeof listDeviceCommands>>>
+export type ListDeviceCommandsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List commands sent to a device
+ */
+
+export function useListDeviceCommands<TData = Awaited<ReturnType<typeof listDeviceCommands>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listDeviceCommands>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListDeviceCommandsQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getSendDeviceCommandUrl = (id: number,) => {
+
+
+
+
+  return `/api/devices/${id}/commands`
+}
+
+/**
+ * @summary Send a command to a device
+ */
+export const sendDeviceCommand = async (id: number,
+    deviceCommandInput: DeviceCommandInput, options?: RequestInit): Promise<DeviceCommand> => {
+
+  return customFetch<DeviceCommand>(getSendDeviceCommandUrl(id),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(deviceCommandInput)
+  }
+);}
+
+
+
+
+export const getSendDeviceCommandMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sendDeviceCommand>>, TError,{id: number;data: BodyType<DeviceCommandInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof sendDeviceCommand>>, TError,{id: number;data: BodyType<DeviceCommandInput>}, TContext> => {
+
+const mutationKey = ['sendDeviceCommand'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof sendDeviceCommand>>, {id: number;data: BodyType<DeviceCommandInput>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  sendDeviceCommand(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SendDeviceCommandMutationResult = NonNullable<Awaited<ReturnType<typeof sendDeviceCommand>>>
+    export type SendDeviceCommandMutationBody = BodyType<DeviceCommandInput>
+    export type SendDeviceCommandMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Send a command to a device
+ */
+export const useSendDeviceCommand = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sendDeviceCommand>>, TError,{id: number;data: BodyType<DeviceCommandInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof sendDeviceCommand>>,
+        TError,
+        {id: number;data: BodyType<DeviceCommandInput>},
+        TContext
+      > => {
+      return useMutation(getSendDeviceCommandMutationOptions(options));
+    }
+
+export const getGetDeviceCommandUrl = (id: number,
+    cmdId: number,) => {
+
+
+
+
+  return `/api/devices/${id}/commands/${cmdId}`
+}
+
+/**
+ * @summary Get a specific command by ID
+ */
+export const getDeviceCommand = async (id: number,
+    cmdId: number, options?: RequestInit): Promise<DeviceCommand> => {
+
+  return customFetch<DeviceCommand>(getGetDeviceCommandUrl(id,cmdId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetDeviceCommandQueryKey = (id: number,
+    cmdId: number,) => {
+    return [
+    `/api/devices/${id}/commands/${cmdId}`
+    ] as const;
+    }
+
+
+export const getGetDeviceCommandQueryOptions = <TData = Awaited<ReturnType<typeof getDeviceCommand>>, TError = ErrorType<unknown>>(id: number,
+    cmdId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getDeviceCommand>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDeviceCommandQueryKey(id,cmdId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDeviceCommand>>> = ({ signal }) => getDeviceCommand(id,cmdId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: id !== null && id !== undefined && cmdId !== null && cmdId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDeviceCommand>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetDeviceCommandQueryResult = NonNullable<Awaited<ReturnType<typeof getDeviceCommand>>>
+export type GetDeviceCommandQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get a specific command by ID
+ */
+
+export function useGetDeviceCommand<TData = Awaited<ReturnType<typeof getDeviceCommand>>, TError = ErrorType<unknown>>(
+ id: number,
+    cmdId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getDeviceCommand>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetDeviceCommandQueryOptions(id,cmdId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetDeviceCommLogsUrl = (id: number,
+    params?: GetDeviceCommLogsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/devices/${id}/comm-logs?${stringifiedParams}` : `/api/devices/${id}/comm-logs`
+}
+
+/**
+ * @summary Get communication logs for a device
+ */
+export const getDeviceCommLogs = async (id: number,
+    params?: GetDeviceCommLogsParams, options?: RequestInit): Promise<CommunicationLog[]> => {
+
+  return customFetch<CommunicationLog[]>(getGetDeviceCommLogsUrl(id,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetDeviceCommLogsQueryKey = (id: number,
+    params?: GetDeviceCommLogsParams,) => {
+    return [
+    `/api/devices/${id}/comm-logs`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetDeviceCommLogsQueryOptions = <TData = Awaited<ReturnType<typeof getDeviceCommLogs>>, TError = ErrorType<unknown>>(id: number,
+    params?: GetDeviceCommLogsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getDeviceCommLogs>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDeviceCommLogsQueryKey(id,params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDeviceCommLogs>>> = ({ signal }) => getDeviceCommLogs(id,params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDeviceCommLogs>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetDeviceCommLogsQueryResult = NonNullable<Awaited<ReturnType<typeof getDeviceCommLogs>>>
+export type GetDeviceCommLogsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get communication logs for a device
+ */
+
+export function useGetDeviceCommLogs<TData = Awaited<ReturnType<typeof getDeviceCommLogs>>, TError = ErrorType<unknown>>(
+ id: number,
+    params?: GetDeviceCommLogsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getDeviceCommLogs>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetDeviceCommLogsQueryOptions(id,params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getListCommLogsUrl = (params?: ListCommLogsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/comm-logs?${stringifiedParams}` : `/api/comm-logs`
+}
+
+/**
+ * @summary List all communication logs
+ */
+export const listCommLogs = async (params?: ListCommLogsParams, options?: RequestInit): Promise<CommunicationLog[]> => {
+
+  return customFetch<CommunicationLog[]>(getListCommLogsUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListCommLogsQueryKey = (params?: ListCommLogsParams,) => {
+    return [
+    `/api/comm-logs`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getListCommLogsQueryOptions = <TData = Awaited<ReturnType<typeof listCommLogs>>, TError = ErrorType<unknown>>(params?: ListCommLogsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listCommLogs>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListCommLogsQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listCommLogs>>> = ({ signal }) => listCommLogs(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listCommLogs>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListCommLogsQueryResult = NonNullable<Awaited<ReturnType<typeof listCommLogs>>>
+export type ListCommLogsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List all communication logs
+ */
+
+export function useListCommLogs<TData = Awaited<ReturnType<typeof listCommLogs>>, TError = ErrorType<unknown>>(
+ params?: ListCommLogsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listCommLogs>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListCommLogsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetMqttStatusUrl = () => {
+
+
+
+
+  return `/api/mqtt/status`
+}
+
+/**
+ * @summary Get MQTT broker status and statistics
+ */
+export const getMqttStatus = async ( options?: RequestInit): Promise<MqttBrokerStatus> => {
+
+  return customFetch<MqttBrokerStatus>(getGetMqttStatusUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetMqttStatusQueryKey = () => {
+    return [
+    `/api/mqtt/status`
+    ] as const;
+    }
+
+
+export const getGetMqttStatusQueryOptions = <TData = Awaited<ReturnType<typeof getMqttStatus>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMqttStatus>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMqttStatusQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMqttStatus>>> = ({ signal }) => getMqttStatus({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMqttStatus>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetMqttStatusQueryResult = NonNullable<Awaited<ReturnType<typeof getMqttStatus>>>
+export type GetMqttStatusQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get MQTT broker status and statistics
+ */
+
+export function useGetMqttStatus<TData = Awaited<ReturnType<typeof getMqttStatus>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMqttStatus>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetMqttStatusQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getListMqttMessagesUrl = (params?: ListMqttMessagesParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/mqtt/messages?${stringifiedParams}` : `/api/mqtt/messages`
+}
+
+/**
+ * @summary List recent MQTT messages
+ */
+export const listMqttMessages = async (params?: ListMqttMessagesParams, options?: RequestInit): Promise<MqttMessageRecord[]> => {
+
+  return customFetch<MqttMessageRecord[]>(getListMqttMessagesUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListMqttMessagesQueryKey = (params?: ListMqttMessagesParams,) => {
+    return [
+    `/api/mqtt/messages`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getListMqttMessagesQueryOptions = <TData = Awaited<ReturnType<typeof listMqttMessages>>, TError = ErrorType<unknown>>(params?: ListMqttMessagesParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listMqttMessages>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListMqttMessagesQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listMqttMessages>>> = ({ signal }) => listMqttMessages(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listMqttMessages>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListMqttMessagesQueryResult = NonNullable<Awaited<ReturnType<typeof listMqttMessages>>>
+export type ListMqttMessagesQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List recent MQTT messages
+ */
+
+export function useListMqttMessages<TData = Awaited<ReturnType<typeof listMqttMessages>>, TError = ErrorType<unknown>>(
+ params?: ListMqttMessagesParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listMqttMessages>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListMqttMessagesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getListFirmwareVersionsUrl = () => {
+
+
+
+
+  return `/api/firmware`
+}
+
+/**
+ * @summary List all firmware versions
+ */
+export const listFirmwareVersions = async ( options?: RequestInit): Promise<FirmwareVersion[]> => {
+
+  return customFetch<FirmwareVersion[]>(getListFirmwareVersionsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListFirmwareVersionsQueryKey = () => {
+    return [
+    `/api/firmware`
+    ] as const;
+    }
+
+
+export const getListFirmwareVersionsQueryOptions = <TData = Awaited<ReturnType<typeof listFirmwareVersions>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listFirmwareVersions>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListFirmwareVersionsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listFirmwareVersions>>> = ({ signal }) => listFirmwareVersions({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listFirmwareVersions>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListFirmwareVersionsQueryResult = NonNullable<Awaited<ReturnType<typeof listFirmwareVersions>>>
+export type ListFirmwareVersionsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List all firmware versions
+ */
+
+export function useListFirmwareVersions<TData = Awaited<ReturnType<typeof listFirmwareVersions>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listFirmwareVersions>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListFirmwareVersionsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getCreateFirmwareVersionUrl = () => {
+
+
+
+
+  return `/api/firmware`
+}
+
+/**
+ * @summary Register a new firmware version
+ */
+export const createFirmwareVersion = async (firmwareVersionInput: FirmwareVersionInput, options?: RequestInit): Promise<FirmwareVersion> => {
+
+  return customFetch<FirmwareVersion>(getCreateFirmwareVersionUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(firmwareVersionInput)
+  }
+);}
+
+
+
+
+export const getCreateFirmwareVersionMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFirmwareVersion>>, TError,{data: BodyType<FirmwareVersionInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createFirmwareVersion>>, TError,{data: BodyType<FirmwareVersionInput>}, TContext> => {
+
+const mutationKey = ['createFirmwareVersion'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createFirmwareVersion>>, {data: BodyType<FirmwareVersionInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createFirmwareVersion(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateFirmwareVersionMutationResult = NonNullable<Awaited<ReturnType<typeof createFirmwareVersion>>>
+    export type CreateFirmwareVersionMutationBody = BodyType<FirmwareVersionInput>
+    export type CreateFirmwareVersionMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Register a new firmware version
+ */
+export const useCreateFirmwareVersion = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFirmwareVersion>>, TError,{data: BodyType<FirmwareVersionInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createFirmwareVersion>>,
+        TError,
+        {data: BodyType<FirmwareVersionInput>},
+        TContext
+      > => {
+      return useMutation(getCreateFirmwareVersionMutationOptions(options));
+    }
+
+export const getGetFirmwareVersionUrl = (id: number,) => {
+
+
+
+
+  return `/api/firmware/${id}`
+}
+
+/**
+ * @summary Get a firmware version by ID
+ */
+export const getFirmwareVersion = async (id: number, options?: RequestInit): Promise<FirmwareVersion> => {
+
+  return customFetch<FirmwareVersion>(getGetFirmwareVersionUrl(id),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetFirmwareVersionQueryKey = (id: number,) => {
+    return [
+    `/api/firmware/${id}`
+    ] as const;
+    }
+
+
+export const getGetFirmwareVersionQueryOptions = <TData = Awaited<ReturnType<typeof getFirmwareVersion>>, TError = ErrorType<void>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFirmwareVersion>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFirmwareVersionQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFirmwareVersion>>> = ({ signal }) => getFirmwareVersion(id, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFirmwareVersion>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetFirmwareVersionQueryResult = NonNullable<Awaited<ReturnType<typeof getFirmwareVersion>>>
+export type GetFirmwareVersionQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get a firmware version by ID
+ */
+
+export function useGetFirmwareVersion<TData = Awaited<ReturnType<typeof getFirmwareVersion>>, TError = ErrorType<void>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFirmwareVersion>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetFirmwareVersionQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getDeleteFirmwareVersionUrl = (id: number,) => {
+
+
+
+
+  return `/api/firmware/${id}`
+}
+
+/**
+ * @summary Delete a firmware version
+ */
+export const deleteFirmwareVersion = async (id: number, options?: RequestInit): Promise<void> => {
+
+  return customFetch<void>(getDeleteFirmwareVersionUrl(id),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+export const getDeleteFirmwareVersionMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFirmwareVersion>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteFirmwareVersion>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteFirmwareVersion'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteFirmwareVersion>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteFirmwareVersion(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteFirmwareVersionMutationResult = NonNullable<Awaited<ReturnType<typeof deleteFirmwareVersion>>>
+
+    export type DeleteFirmwareVersionMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Delete a firmware version
+ */
+export const useDeleteFirmwareVersion = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFirmwareVersion>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteFirmwareVersion>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getDeleteFirmwareVersionMutationOptions(options));
+    }
+
+export const getListOtaJobsUrl = () => {
+
+
+
+
+  return `/api/ota`
+}
+
+/**
+ * @summary List all OTA jobs
+ */
+export const listOtaJobs = async ( options?: RequestInit): Promise<OtaJob[]> => {
+
+  return customFetch<OtaJob[]>(getListOtaJobsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListOtaJobsQueryKey = () => {
+    return [
+    `/api/ota`
+    ] as const;
+    }
+
+
+export const getListOtaJobsQueryOptions = <TData = Awaited<ReturnType<typeof listOtaJobs>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listOtaJobs>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListOtaJobsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listOtaJobs>>> = ({ signal }) => listOtaJobs({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listOtaJobs>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListOtaJobsQueryResult = NonNullable<Awaited<ReturnType<typeof listOtaJobs>>>
+export type ListOtaJobsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List all OTA jobs
+ */
+
+export function useListOtaJobs<TData = Awaited<ReturnType<typeof listOtaJobs>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listOtaJobs>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListOtaJobsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getTriggerOtaUpdateUrl = (id: number,) => {
+
+
+
+
+  return `/api/devices/${id}/ota`
+}
+
+/**
+ * @summary Trigger an OTA firmware update for a device
+ */
+export const triggerOtaUpdate = async (id: number,
+    otaJobInput: OtaJobInput, options?: RequestInit): Promise<OtaJob> => {
+
+  return customFetch<OtaJob>(getTriggerOtaUpdateUrl(id),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(otaJobInput)
+  }
+);}
+
+
+
+
+export const getTriggerOtaUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof triggerOtaUpdate>>, TError,{id: number;data: BodyType<OtaJobInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof triggerOtaUpdate>>, TError,{id: number;data: BodyType<OtaJobInput>}, TContext> => {
+
+const mutationKey = ['triggerOtaUpdate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof triggerOtaUpdate>>, {id: number;data: BodyType<OtaJobInput>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  triggerOtaUpdate(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TriggerOtaUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof triggerOtaUpdate>>>
+    export type TriggerOtaUpdateMutationBody = BodyType<OtaJobInput>
+    export type TriggerOtaUpdateMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Trigger an OTA firmware update for a device
+ */
+export const useTriggerOtaUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof triggerOtaUpdate>>, TError,{id: number;data: BodyType<OtaJobInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof triggerOtaUpdate>>,
+        TError,
+        {id: number;data: BodyType<OtaJobInput>},
+        TContext
+      > => {
+      return useMutation(getTriggerOtaUpdateMutationOptions(options));
+    }
+
+export const getGetOtaJobUrl = (id: number,) => {
+
+
+
+
+  return `/api/ota/${id}`
+}
+
+/**
+ * @summary Get an OTA job by ID
+ */
+export const getOtaJob = async (id: number, options?: RequestInit): Promise<OtaJob> => {
+
+  return customFetch<OtaJob>(getGetOtaJobUrl(id),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetOtaJobQueryKey = (id: number,) => {
+    return [
+    `/api/ota/${id}`
+    ] as const;
+    }
+
+
+export const getGetOtaJobQueryOptions = <TData = Awaited<ReturnType<typeof getOtaJob>>, TError = ErrorType<void>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOtaJob>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetOtaJobQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOtaJob>>> = ({ signal }) => getOtaJob(id, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOtaJob>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetOtaJobQueryResult = NonNullable<Awaited<ReturnType<typeof getOtaJob>>>
+export type GetOtaJobQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get an OTA job by ID
+ */
+
+export function useGetOtaJob<TData = Awaited<ReturnType<typeof getOtaJob>>, TError = ErrorType<void>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOtaJob>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetOtaJobQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getCancelOtaJobUrl = (id: number,) => {
+
+
+
+
+  return `/api/ota/${id}/cancel`
+}
+
+/**
+ * @summary Cancel a pending OTA job
+ */
+export const cancelOtaJob = async (id: number, options?: RequestInit): Promise<OtaJob> => {
+
+  return customFetch<OtaJob>(getCancelOtaJobUrl(id),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+export const getCancelOtaJobMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof cancelOtaJob>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof cancelOtaJob>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['cancelOtaJob'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof cancelOtaJob>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  cancelOtaJob(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CancelOtaJobMutationResult = NonNullable<Awaited<ReturnType<typeof cancelOtaJob>>>
+
+    export type CancelOtaJobMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Cancel a pending OTA job
+ */
+export const useCancelOtaJob = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof cancelOtaJob>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof cancelOtaJob>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getCancelOtaJobMutationOptions(options));
+    }
+
+export const getStartEsp32SimulatorUrl = () => {
+
+
+
+
+  return `/api/simulator/esp32/start`
+}
+
+/**
+ * @summary Start the ESP32 MQTT simulator
+ */
+export const startEsp32Simulator = async (esp32SimulatorConfig?: Esp32SimulatorConfig, options?: RequestInit): Promise<Esp32SimulatorStatus> => {
+
+  return customFetch<Esp32SimulatorStatus>(getStartEsp32SimulatorUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(esp32SimulatorConfig)
+  }
+);}
+
+
+
+
+export const getStartEsp32SimulatorMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startEsp32Simulator>>, TError,{data?: BodyType<Esp32SimulatorConfig>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof startEsp32Simulator>>, TError,{data?: BodyType<Esp32SimulatorConfig>}, TContext> => {
+
+const mutationKey = ['startEsp32Simulator'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof startEsp32Simulator>>, {data?: BodyType<Esp32SimulatorConfig>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  startEsp32Simulator(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type StartEsp32SimulatorMutationResult = NonNullable<Awaited<ReturnType<typeof startEsp32Simulator>>>
+    export type StartEsp32SimulatorMutationBody = BodyType<Esp32SimulatorConfig> | undefined
+    export type StartEsp32SimulatorMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Start the ESP32 MQTT simulator
+ */
+export const useStartEsp32Simulator = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startEsp32Simulator>>, TError,{data?: BodyType<Esp32SimulatorConfig>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof startEsp32Simulator>>,
+        TError,
+        {data?: BodyType<Esp32SimulatorConfig>},
+        TContext
+      > => {
+      return useMutation(getStartEsp32SimulatorMutationOptions(options));
+    }
+
+export const getStopEsp32SimulatorUrl = () => {
+
+
+
+
+  return `/api/simulator/esp32/stop`
+}
+
+/**
+ * @summary Stop the ESP32 MQTT simulator
+ */
+export const stopEsp32Simulator = async ( options?: RequestInit): Promise<Esp32SimulatorStatus> => {
+
+  return customFetch<Esp32SimulatorStatus>(getStopEsp32SimulatorUrl(),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+export const getStopEsp32SimulatorMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof stopEsp32Simulator>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof stopEsp32Simulator>>, TError,void, TContext> => {
+
+const mutationKey = ['stopEsp32Simulator'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof stopEsp32Simulator>>, void> = () => {
+
+
+          return  stopEsp32Simulator(requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type StopEsp32SimulatorMutationResult = NonNullable<Awaited<ReturnType<typeof stopEsp32Simulator>>>
+
+    export type StopEsp32SimulatorMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Stop the ESP32 MQTT simulator
+ */
+export const useStopEsp32Simulator = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof stopEsp32Simulator>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof stopEsp32Simulator>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getStopEsp32SimulatorMutationOptions(options));
+    }
+
+export const getGetEsp32SimulatorStatusUrl = () => {
+
+
+
+
+  return `/api/simulator/esp32/status`
+}
+
+/**
+ * @summary Get ESP32 simulator status
+ */
+export const getEsp32SimulatorStatus = async ( options?: RequestInit): Promise<Esp32SimulatorStatus> => {
+
+  return customFetch<Esp32SimulatorStatus>(getGetEsp32SimulatorStatusUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetEsp32SimulatorStatusQueryKey = () => {
+    return [
+    `/api/simulator/esp32/status`
+    ] as const;
+    }
+
+
+export const getGetEsp32SimulatorStatusQueryOptions = <TData = Awaited<ReturnType<typeof getEsp32SimulatorStatus>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getEsp32SimulatorStatus>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEsp32SimulatorStatusQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEsp32SimulatorStatus>>> = ({ signal }) => getEsp32SimulatorStatus({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEsp32SimulatorStatus>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetEsp32SimulatorStatusQueryResult = NonNullable<Awaited<ReturnType<typeof getEsp32SimulatorStatus>>>
+export type GetEsp32SimulatorStatusQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get ESP32 simulator status
+ */
+
+export function useGetEsp32SimulatorStatus<TData = Awaited<ReturnType<typeof getEsp32SimulatorStatus>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getEsp32SimulatorStatus>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetEsp32SimulatorStatusQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getConfigureEsp32SimulatorUrl = () => {
+
+
+
+
+  return `/api/simulator/esp32/config`
+}
+
+/**
+ * @summary Configure ESP32 simulator parameters
+ */
+export const configureEsp32Simulator = async (esp32SimulatorConfig: Esp32SimulatorConfig, options?: RequestInit): Promise<Esp32SimulatorStatus> => {
+
+  return customFetch<Esp32SimulatorStatus>(getConfigureEsp32SimulatorUrl(),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(esp32SimulatorConfig)
+  }
+);}
+
+
+
+
+export const getConfigureEsp32SimulatorMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof configureEsp32Simulator>>, TError,{data: BodyType<Esp32SimulatorConfig>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof configureEsp32Simulator>>, TError,{data: BodyType<Esp32SimulatorConfig>}, TContext> => {
+
+const mutationKey = ['configureEsp32Simulator'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof configureEsp32Simulator>>, {data: BodyType<Esp32SimulatorConfig>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  configureEsp32Simulator(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ConfigureEsp32SimulatorMutationResult = NonNullable<Awaited<ReturnType<typeof configureEsp32Simulator>>>
+    export type ConfigureEsp32SimulatorMutationBody = BodyType<Esp32SimulatorConfig>
+    export type ConfigureEsp32SimulatorMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Configure ESP32 simulator parameters
+ */
+export const useConfigureEsp32Simulator = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof configureEsp32Simulator>>, TError,{data: BodyType<Esp32SimulatorConfig>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof configureEsp32Simulator>>,
+        TError,
+        {data: BodyType<Esp32SimulatorConfig>},
+        TContext
+      > => {
+      return useMutation(getConfigureEsp32SimulatorMutationOptions(options));
     }
 
 export const getDuplicateRecipeUrl = (id: number,) => {

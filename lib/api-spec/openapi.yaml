@@ -38,6 +38,20 @@ tags:
     description: SCADA flowchart and industrial state
   - name: devices
     description: IoT device management (ESP32 and nodes)
+  - name: device-groups
+    description: Device group management
+  - name: mqtt
+    description: MQTT broker status and message log
+  - name: telemetry
+    description: Device telemetry data
+  - name: commands
+    description: Device command management
+  - name: firmware
+    description: Firmware version management
+  - name: ota
+    description: Over-the-air update jobs
+  - name: comm-logs
+    description: Device communication logs
 
 paths:
   /healthz:
@@ -1015,6 +1029,492 @@ paths:
               schema:
                 $ref: "#/components/schemas/Device"
 
+  # ─── Device Groups ──────────────────────────────────────────────────────────
+  /device-groups:
+    get:
+      operationId: listDeviceGroups
+      tags: [device-groups]
+      summary: List all device groups
+      responses:
+        "200":
+          description: Device groups list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DeviceGroup"
+    post:
+      operationId: createDeviceGroup
+      tags: [device-groups]
+      summary: Create a device group
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceGroupInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceGroup"
+
+  /device-groups/{id}:
+    get:
+      operationId: getDeviceGroup
+      tags: [device-groups]
+      summary: Get a device group by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Device group
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceGroup"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateDeviceGroup
+      tags: [device-groups]
+      summary: Update a device group
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceGroupUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceGroup"
+    delete:
+      operationId: deleteDeviceGroup
+      tags: [device-groups]
+      summary: Delete a device group
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Device Telemetry ────────────────────────────────────────────────────────
+  /devices/{id}/telemetry:
+    get:
+      operationId: getDeviceTelemetry
+      tags: [telemetry]
+      summary: Get recent telemetry for a device
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+      responses:
+        "200":
+          description: Telemetry points
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TelemetryPoint"
+
+  # ─── Device Commands ─────────────────────────────────────────────────────────
+  /devices/{id}/commands:
+    get:
+      operationId: listDeviceCommands
+      tags: [commands]
+      summary: List commands sent to a device
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Commands list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DeviceCommand"
+    post:
+      operationId: sendDeviceCommand
+      tags: [commands]
+      summary: Send a command to a device
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceCommandInput"
+      responses:
+        "201":
+          description: Command queued
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceCommand"
+
+  /devices/{id}/commands/{cmdId}:
+    get:
+      operationId: getDeviceCommand
+      tags: [commands]
+      summary: Get a specific command by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: cmdId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Command
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceCommand"
+
+  # ─── Device Communication Logs ───────────────────────────────────────────────
+  /devices/{id}/comm-logs:
+    get:
+      operationId: getDeviceCommLogs
+      tags: [comm-logs]
+      summary: Get communication logs for a device
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+      responses:
+        "200":
+          description: Communication logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CommunicationLog"
+
+  /comm-logs:
+    get:
+      operationId: listCommLogs
+      tags: [comm-logs]
+      summary: List all communication logs
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 200
+      responses:
+        "200":
+          description: Communication logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CommunicationLog"
+
+  # ─── MQTT Broker ─────────────────────────────────────────────────────────────
+  /mqtt/status:
+    get:
+      operationId: getMqttStatus
+      tags: [mqtt]
+      summary: Get MQTT broker status and statistics
+      responses:
+        "200":
+          description: MQTT broker status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MqttBrokerStatus"
+
+  /mqtt/messages:
+    get:
+      operationId: listMqttMessages
+      tags: [mqtt]
+      summary: List recent MQTT messages
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+        - name: deviceId
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: MQTT messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MqttMessageRecord"
+
+  # ─── Firmware Versions ───────────────────────────────────────────────────────
+  /firmware:
+    get:
+      operationId: listFirmwareVersions
+      tags: [firmware]
+      summary: List all firmware versions
+      responses:
+        "200":
+          description: Firmware versions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FirmwareVersion"
+    post:
+      operationId: createFirmwareVersion
+      tags: [firmware]
+      summary: Register a new firmware version
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FirmwareVersionInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FirmwareVersion"
+
+  /firmware/{id}:
+    get:
+      operationId: getFirmwareVersion
+      tags: [firmware]
+      summary: Get a firmware version by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Firmware version
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FirmwareVersion"
+        "404":
+          description: Not found
+    delete:
+      operationId: deleteFirmwareVersion
+      tags: [firmware]
+      summary: Delete a firmware version
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── OTA Jobs ────────────────────────────────────────────────────────────────
+  /ota:
+    get:
+      operationId: listOtaJobs
+      tags: [ota]
+      summary: List all OTA jobs
+      responses:
+        "200":
+          description: OTA jobs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OtaJob"
+
+  /devices/{id}/ota:
+    post:
+      operationId: triggerOtaUpdate
+      tags: [ota]
+      summary: Trigger an OTA firmware update for a device
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OtaJobInput"
+      responses:
+        "201":
+          description: OTA job created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OtaJob"
+
+  /ota/{id}:
+    get:
+      operationId: getOtaJob
+      tags: [ota]
+      summary: Get an OTA job by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OTA job
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OtaJob"
+        "404":
+          description: Not found
+
+  /ota/{id}/cancel:
+    post:
+      operationId: cancelOtaJob
+      tags: [ota]
+      summary: Cancel a pending OTA job
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Cancelled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OtaJob"
+
+  # ─── ESP32 Simulator (enhanced) ──────────────────────────────────────────────
+  /simulator/esp32/start:
+    post:
+      operationId: startEsp32Simulator
+      tags: [simulator]
+      summary: Start the ESP32 MQTT simulator
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Esp32SimulatorConfig"
+      responses:
+        "200":
+          description: Simulator started
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Esp32SimulatorStatus"
+
+  /simulator/esp32/stop:
+    post:
+      operationId: stopEsp32Simulator
+      tags: [simulator]
+      summary: Stop the ESP32 MQTT simulator
+      responses:
+        "200":
+          description: Simulator stopped
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Esp32SimulatorStatus"
+
+  /simulator/esp32/status:
+    get:
+      operationId: getEsp32SimulatorStatus
+      tags: [simulator]
+      summary: Get ESP32 simulator status
+      responses:
+        "200":
+          description: Simulator status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Esp32SimulatorStatus"
+
+  /simulator/esp32/config:
+    patch:
+      operationId: configureEsp32Simulator
+      tags: [simulator]
+      summary: Configure ESP32 simulator parameters
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Esp32SimulatorConfig"
+      responses:
+        "200":
+          description: Configuration updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Esp32SimulatorStatus"
+
   # ─── Recipe Duplicate ────────────────────────────────────────────────────────
   /recipes/{id}/duplicate:
     post:
@@ -1781,7 +2281,7 @@ components:
     # ─── Devices ───────────────────────────────────────────────────────────────
     Device:
       type: object
-      required: [id, name, deviceId, type, status, createdAt]
+      required: [id, name, deviceId, type, status, uplinkCount, downlinkCount, createdAt]
       properties:
         id:
           type: integer
@@ -1792,6 +2292,10 @@ components:
         type:
           type: string
           enum: [esp32, sensor_node, actuator_node, gateway, controller]
+        model:
+          type: ["string", "null"]
+        serialNumber:
+          type: ["string", "null"]
         ipAddress:
           type: ["string", "null"]
         firmwareVersion:
@@ -1803,6 +2307,18 @@ components:
           type: ["string", "null"]
         rssi:
           type: ["integer", "null"]
+        uptime:
+          type: ["integer", "null"]
+        groupId:
+          type: ["integer", "null"]
+        plant:
+          type: ["string", "null"]
+        sector:
+          type: ["string", "null"]
+        uplinkCount:
+          type: integer
+        downlinkCount:
+          type: integer
         location:
           type: ["string", "null"]
         notes:
@@ -1821,9 +2337,19 @@ components:
         type:
           type: string
           enum: [esp32, sensor_node, actuator_node, gateway, controller]
+        model:
+          type: string
+        serialNumber:
+          type: string
         ipAddress:
           type: string
         firmwareVersion:
+          type: string
+        groupId:
+          type: integer
+        plant:
+          type: string
+        sector:
           type: string
         location:
           type: string
@@ -1838,6 +2364,10 @@ components:
         type:
           type: string
           enum: [esp32, sensor_node, actuator_node, gateway, controller]
+        model:
+          type: string
+        serialNumber:
+          type: string
         ipAddress:
           type: string
         firmwareVersion:
@@ -1845,6 +2375,12 @@ components:
         status:
           type: string
           enum: [online, offline, error, unknown]
+        groupId:
+          type: integer
+        plant:
+          type: string
+        sector:
+          type: string
         location:
           type: string
         notes:
@@ -1859,3 +2395,294 @@ components:
           type: string
         rssi:
           type: integer
+        uptime:
+          type: integer
+
+    # ─── Device Groups ──────────────────────────────────────────────────────────
+    DeviceGroup:
+      type: object
+      required: [id, name, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        plant:
+          type: ["string", "null"]
+        sector:
+          type: ["string", "null"]
+        description:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    DeviceGroupInput:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        plant:
+          type: string
+        sector:
+          type: string
+        description:
+          type: string
+
+    DeviceGroupUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        plant:
+          type: string
+        sector:
+          type: string
+        description:
+          type: string
+
+    # ─── Device Commands ────────────────────────────────────────────────────────
+    DeviceCommand:
+      type: object
+      required: [id, deviceId, command, status, sentAt]
+      properties:
+        id:
+          type: integer
+        deviceId:
+          type: integer
+        command:
+          type: string
+        params:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [pending, sent, acknowledged, failed, timeout]
+        sentAt:
+          type: string
+        acknowledgedAt:
+          type: ["string", "null"]
+        response:
+          type: ["string", "null"]
+        error:
+          type: ["string", "null"]
+
+    DeviceCommandInput:
+      type: object
+      required: [command]
+      properties:
+        command:
+          type: string
+          enum: [start_production, pause, resume, cancel, set_setpoint, set_time, pump_on, pump_off, valve_open, valve_close, resistance_on, resistance_off, restart, ota_update, sync]
+        params:
+          type: string
+
+    # ─── Telemetry ──────────────────────────────────────────────────────────────
+    TelemetryPoint:
+      type: object
+      required: [id, deviceId, timestamp]
+      properties:
+        id:
+          type: integer
+        deviceId:
+          type: integer
+        temperature:
+          type: ["number", "null"]
+        pressure:
+          type: ["number", "null"]
+        ph:
+          type: ["number", "null"]
+        flow:
+          type: ["number", "null"]
+        volume:
+          type: ["number", "null"]
+        density:
+          type: ["number", "null"]
+        pumpState:
+          type: ["boolean", "null"]
+        valveState:
+          type: ["boolean", "null"]
+        resistanceState:
+          type: ["boolean", "null"]
+        rssi:
+          type: ["integer", "null"]
+        heap:
+          type: ["integer", "null"]
+        uptime:
+          type: ["integer", "null"]
+        timestamp:
+          type: string
+
+    # ─── MQTT ───────────────────────────────────────────────────────────────────
+    MqttBrokerStatus:
+      type: object
+      required: [running, clientCount, totalMessages, uptime]
+      properties:
+        running:
+          type: boolean
+        clientCount:
+          type: integer
+        connectedDevices:
+          type: array
+          items:
+            type: string
+        totalMessages:
+          type: integer
+        uplinkMessages:
+          type: integer
+        downlinkMessages:
+          type: integer
+        uptime:
+          type: integer
+
+    MqttMessageRecord:
+      type: object
+      required: [id, topic, direction, timestamp]
+      properties:
+        id:
+          type: integer
+        deviceId:
+          type: ["integer", "null"]
+        deviceIdentifier:
+          type: ["string", "null"]
+        topic:
+          type: string
+        payload:
+          type: ["string", "null"]
+        direction:
+          type: string
+          enum: [inbound, outbound]
+        qos:
+          type: integer
+        timestamp:
+          type: string
+
+    # ─── Firmware ───────────────────────────────────────────────────────────────
+    FirmwareVersion:
+      type: object
+      required: [id, version, stable, releaseDate, createdAt]
+      properties:
+        id:
+          type: integer
+        version:
+          type: string
+        description:
+          type: ["string", "null"]
+        url:
+          type: ["string", "null"]
+        checksum:
+          type: ["string", "null"]
+        size:
+          type: ["integer", "null"]
+        stable:
+          type: boolean
+        releaseDate:
+          type: string
+        createdAt:
+          type: string
+
+    FirmwareVersionInput:
+      type: object
+      required: [version]
+      properties:
+        version:
+          type: string
+        description:
+          type: string
+        url:
+          type: string
+        checksum:
+          type: string
+        size:
+          type: integer
+        stable:
+          type: boolean
+
+    # ─── OTA ────────────────────────────────────────────────────────────────────
+    OtaJob:
+      type: object
+      required: [id, deviceId, targetVersion, status, progress, startedAt, createdAt]
+      properties:
+        id:
+          type: integer
+        deviceId:
+          type: integer
+        firmwareVersionId:
+          type: ["integer", "null"]
+        targetVersion:
+          type: string
+        status:
+          type: string
+          enum: [pending, downloading, installing, completed, failed, cancelled]
+        progress:
+          type: integer
+        error:
+          type: ["string", "null"]
+        startedAt:
+          type: string
+        completedAt:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    OtaJobInput:
+      type: object
+      required: [targetVersion]
+      properties:
+        targetVersion:
+          type: string
+        firmwareVersionId:
+          type: integer
+
+    # ─── Communication Logs ─────────────────────────────────────────────────────
+    CommunicationLog:
+      type: object
+      required: [id, event, timestamp]
+      properties:
+        id:
+          type: integer
+        deviceId:
+          type: ["integer", "null"]
+        deviceIdentifier:
+          type: ["string", "null"]
+        event:
+          type: string
+        details:
+          type: ["string", "null"]
+        timestamp:
+          type: string
+
+    # ─── ESP32 Simulator ────────────────────────────────────────────────────────
+    Esp32SimulatorStatus:
+      type: object
+      required: [running, deviceCount, tickIntervalMs, totalTicks]
+      properties:
+        running:
+          type: boolean
+        deviceCount:
+          type: integer
+        tickIntervalMs:
+          type: integer
+        totalTicks:
+          type: integer
+        devices:
+          type: array
+          items:
+            type: object
+            required: [deviceId, name, status]
+            properties:
+              deviceId:
+                type: string
+              name:
+                type: string
+              status:
+                type: string
+
+    Esp32SimulatorConfig:
+      type: object
+      properties:
+        tickIntervalMs:
+          type: integer
+        deviceIds:
+          type: array
+          items:
+            type: string

@@ -19,6 +19,10 @@ import {
   Wifi,
   Sun,
   Moon,
+  Radio,
+  Terminal,
+  Upload,
+  Network,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useListActiveAlarms, getListActiveAlarmsQueryKey } from "@workspace/api-client-react";
@@ -46,6 +50,17 @@ const NAV_GROUPS = [
       { href: "/recipes",   icon: FlaskConical,    label: "Receitas" },
       { href: "/equipment", icon: Container,       label: "Equipamentos" },
       { href: "/devices",   icon: Wifi,            label: "Dispositivos IoT" },
+    ]
+  },
+  {
+    label: "IoT & MQTT",
+    items: [
+      { href: "/iot",       icon: Radio,           label: "Painel IoT" },
+      { href: "/mqtt",      icon: Network,         label: "Monitor MQTT" },
+      { href: "/telemetry", icon: Activity,        label: "Telemetria" },
+      { href: "/commands",  icon: Terminal,        label: "Comandos" },
+      { href: "/firmware",  icon: Upload,          label: "Firmware & OTA" },
+      { href: "/comm-logs", icon: FileText,        label: "Logs de Comunicação" },
     ]
   },
   {
