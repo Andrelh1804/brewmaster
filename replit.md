@@ -14,7 +14,7 @@ A professional SaaS platform for automated craft beer production using IoT (ESP3
 
 ## Stack
 
-- pnpm workspaces, Node.js 24, TypeScript 5.9
+- pnpm workspaces, Node.js 20, TypeScript 5.9
 - **Frontend**: React + Vite + Tailwind CSS + Recharts + Wouter routing + TanStack Query
 - **Backend**: Express 5 (Node.js)
 - **DB**: PostgreSQL + Drizzle ORM
