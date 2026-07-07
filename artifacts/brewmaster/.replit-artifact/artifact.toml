@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "BrewMaster AI"
+version = "1.0.0"
+id = "artifacts/brewmaster"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23975
+
+[services.development]
+run = "pnpm --filter @workspace/brewmaster run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/brewmaster", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/brewmaster/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23975"
+BASE_PATH = "/"

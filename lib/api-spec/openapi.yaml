@@ -3,20 +3,44 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: BrewMaster AI Platform API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: dashboard
+    description: Dashboard and overview operations
+  - name: recipes
+    description: Beer recipe management
+  - name: productions
+    description: Production run management
+  - name: equipment
+    description: Equipment management
+  - name: sensors
+    description: Sensor data and readings
+  - name: actuators
+    description: Actuator control
+  - name: alarms
+    description: Alarm management
+  - name: history
+    description: Historical data
+  - name: reports
+    description: Reports and analytics
+  - name: users
+    description: User management
+  - name: ai
+    description: AI assistant
+  - name: simulator
+    description: IoT data simulator
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +48,826 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # ─── Dashboard ──────────────────────────────────────────────────────────────
+  /dashboard/overview:
+    get:
+      operationId: getDashboardOverview
+      tags: [dashboard]
+      summary: Get dashboard overview stats
+      responses:
+        "200":
+          description: Dashboard overview
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardOverview"
+
+  /dashboard/sensor-summary:
+    get:
+      operationId: getDashboardSensorSummary
+      tags: [dashboard]
+      summary: Get live sensor summary for dashboard
+      responses:
+        "200":
+          description: Current sensor readings summary
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SensorReading"
+
+  /dashboard/recent-events:
+    get:
+      operationId: getDashboardRecentEvents
+      tags: [dashboard]
+      summary: Get recent production events
+      responses:
+        "200":
+          description: Recent events list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+
+  # ─── Recipes ────────────────────────────────────────────────────────────────
+  /recipes:
+    get:
+      operationId: listRecipes
+      tags: [recipes]
+      summary: List all recipes
+      responses:
+        "200":
+          description: List of recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Recipe"
+    post:
+      operationId: createRecipe
+      tags: [recipes]
+      summary: Create a new recipe
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RecipeInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+
+  /recipes/{id}:
+    get:
+      operationId: getRecipe
+      tags: [recipes]
+      summary: Get a recipe by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Recipe
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateRecipe
+      tags: [recipes]
+      summary: Update a recipe
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RecipeUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+    delete:
+      operationId: deleteRecipe
+      tags: [recipes]
+      summary: Delete a recipe
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Productions ────────────────────────────────────────────────────────────
+  /productions:
+    get:
+      operationId: listProductions
+      tags: [productions]
+      summary: List all production runs
+      responses:
+        "200":
+          description: Production runs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Production"
+    post:
+      operationId: createProduction
+      tags: [productions]
+      summary: Create and start a new production run
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductionInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Production"
+
+  /productions/active:
+    get:
+      operationId: getActiveProduction
+      tags: [productions]
+      summary: Get currently active production run
+      responses:
+        "200":
+          description: Active production or null
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Production"
+        "404":
+          description: No active production
+
+  /productions/{id}:
+    get:
+      operationId: getProduction
+      tags: [productions]
+      summary: Get a production by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Production
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Production"
+
+  /productions/{id}/pause:
+    post:
+      operationId: pauseProduction
+      tags: [productions]
+      summary: Pause a production run
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Updated production
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Production"
+
+  /productions/{id}/resume:
+    post:
+      operationId: resumeProduction
+      tags: [productions]
+      summary: Resume a paused production run
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Updated production
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Production"
+
+  /productions/{id}/cancel:
+    post:
+      operationId: cancelProduction
+      tags: [productions]
+      summary: Cancel a production run
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Updated production
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Production"
+
+  /productions/{id}/next-stage:
+    post:
+      operationId: advanceProductionStage
+      tags: [productions]
+      summary: Skip to the next production stage
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Updated production
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Production"
+
+  /productions/{id}/notes:
+    post:
+      operationId: addProductionNote
+      tags: [productions]
+      summary: Add an observation note to a production run
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductionNoteInput"
+      responses:
+        "201":
+          description: Note added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+
+  # ─── Equipment ──────────────────────────────────────────────────────────────
+  /equipment:
+    get:
+      operationId: listEquipment
+      tags: [equipment]
+      summary: List all equipment
+      responses:
+        "200":
+          description: Equipment list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Equipment"
+    post:
+      operationId: createEquipment
+      tags: [equipment]
+      summary: Add a new equipment item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EquipmentInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Equipment"
+
+  /equipment/{id}:
+    get:
+      operationId: getEquipment
+      tags: [equipment]
+      summary: Get equipment by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Equipment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Equipment"
+    patch:
+      operationId: updateEquipment
+      tags: [equipment]
+      summary: Update equipment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EquipmentUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Equipment"
+    delete:
+      operationId: deleteEquipment
+      tags: [equipment]
+      summary: Remove equipment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── Sensors ────────────────────────────────────────────────────────────────
+  /sensors:
+    get:
+      operationId: listSensors
+      tags: [sensors]
+      summary: List all sensors
+      responses:
+        "200":
+          description: Sensors list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Sensor"
+    post:
+      operationId: createSensor
+      tags: [sensors]
+      summary: Add a new sensor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SensorInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sensor"
+
+  /sensors/{id}:
+    get:
+      operationId: getSensor
+      tags: [sensors]
+      summary: Get sensor by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Sensor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sensor"
+    patch:
+      operationId: updateSensor
+      tags: [sensors]
+      summary: Update sensor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SensorUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sensor"
+    delete:
+      operationId: deleteSensor
+      tags: [sensors]
+      summary: Delete sensor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /sensors/{id}/readings:
+    get:
+      operationId: getSensorReadings
+      tags: [sensors]
+      summary: Get historical readings for a sensor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Readings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SensorReading"
+
+  # ─── Actuators ──────────────────────────────────────────────────────────────
+  /actuators:
+    get:
+      operationId: listActuators
+      tags: [actuators]
+      summary: List all actuators
+      responses:
+        "200":
+          description: Actuators list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Actuator"
+    post:
+      operationId: createActuator
+      tags: [actuators]
+      summary: Add a new actuator
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActuatorInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Actuator"
+
+  /actuators/{id}/toggle:
+    post:
+      operationId: toggleActuator
+      tags: [actuators]
+      summary: Toggle an actuator on/off
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Updated actuator
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Actuator"
+
+  # ─── Alarms ─────────────────────────────────────────────────────────────────
+  /alarms:
+    get:
+      operationId: listAlarms
+      tags: [alarms]
+      summary: List alarms
+      responses:
+        "200":
+          description: Alarms list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Alarm"
+    post:
+      operationId: createAlarm
+      tags: [alarms]
+      summary: Create an alarm
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AlarmInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alarm"
+
+  /alarms/active:
+    get:
+      operationId: listActiveAlarms
+      tags: [alarms]
+      summary: List unacknowledged alarms
+      responses:
+        "200":
+          description: Active alarms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Alarm"
+
+  /alarms/{id}/acknowledge:
+    post:
+      operationId: acknowledgeAlarm
+      tags: [alarms]
+      summary: Acknowledge an alarm
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Acknowledged alarm
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alarm"
+
+  # ─── History ────────────────────────────────────────────────────────────────
+  /history:
+    get:
+      operationId: listHistory
+      tags: [history]
+      summary: List all historical events
+      responses:
+        "200":
+          description: Events history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+
+  # ─── Reports ────────────────────────────────────────────────────────────────
+  /reports/production-summary:
+    get:
+      operationId: getProductionReport
+      tags: [reports]
+      summary: Get production efficiency and summary report
+      responses:
+        "200":
+          description: Production report
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductionReport"
+
+  /reports/sensor-history:
+    get:
+      operationId: getSensorHistoryReport
+      tags: [reports]
+      summary: Get sensor readings history for charting
+      responses:
+        "200":
+          description: Sensor history data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SensorHistorySeries"
+
+  /reports/alarm-summary:
+    get:
+      operationId: getAlarmReport
+      tags: [reports]
+      summary: Get alarm statistics
+      responses:
+        "200":
+          description: Alarm report
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlarmReport"
+
+  # ─── Users ──────────────────────────────────────────────────────────────────
+  /users:
+    get:
+      operationId: listUsers
+      tags: [users]
+      summary: List all users
+      responses:
+        "200":
+          description: Users list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+    post:
+      operationId: createUser
+      tags: [users]
+      summary: Create a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /users/{id}:
+    get:
+      operationId: getUser
+      tags: [users]
+      summary: Get user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    patch:
+      operationId: updateUser
+      tags: [users]
+      summary: Update a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    delete:
+      operationId: deleteUser
+      tags: [users]
+      summary: Delete a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── AI Assistant ───────────────────────────────────────────────────────────
+  /ai/chat:
+    post:
+      operationId: aiChat
+      tags: [ai]
+      summary: Send message to AI brewing assistant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AiMessageInput"
+      responses:
+        "200":
+          description: AI response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AiMessage"
+
+  /ai/diagnose:
+    post:
+      operationId: aiDiagnose
+      tags: [ai]
+      summary: Run AI diagnostic on current production
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AiDiagnoseInput"
+      responses:
+        "200":
+          description: Diagnosis result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AiDiagnosisResult"
+
+  # ─── Simulator ──────────────────────────────────────────────────────────────
+  /simulator/tick:
+    post:
+      operationId: simulatorTick
+      tags: [simulator]
+      summary: Trigger one IoT simulation tick (update sensor values)
+      responses:
+        "200":
+          description: Updated readings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SensorReading"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +878,588 @@ components:
       required:
         - status
 
+    # ─── Dashboard ─────────────────────────────────────────────────────────────
+    DashboardOverview:
+      type: object
+      required:
+        - activeProduction
+        - connectedEquipment
+        - totalEquipment
+        - activeAlarms
+        - totalRecipes
+        - lastProduction
+        - iotStatus
+      properties:
+        activeProduction:
+          anyOf:
+            - $ref: "#/components/schemas/Production"
+            - type: "null"
+        connectedEquipment:
+          type: integer
+        totalEquipment:
+          type: integer
+        activeAlarms:
+          type: integer
+        totalRecipes:
+          type: integer
+        lastProduction:
+          type: ["string", "null"]
+        iotStatus:
+          type: string
+          enum: [online, offline, simulated]
+
+    # ─── Recipes ───────────────────────────────────────────────────────────────
+    Recipe:
+      type: object
+      required: [id, name, style, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        style:
+          type: string
+        description:
+          type: ["string", "null"]
+        malts:
+          type: ["string", "null"]
+        hops:
+          type: ["string", "null"]
+        yeasts:
+          type: ["string", "null"]
+        adjuncts:
+          type: ["string", "null"]
+        waterProfile:
+          type: ["string", "null"]
+        mashProfile:
+          type: ["string", "null"]
+        boilTimeMins:
+          type: ["integer", "null"]
+        hopAdditions:
+          type: ["string", "null"]
+        fermentationProfile:
+          type: ["string", "null"]
+        maturationProfile:
+          type: ["string", "null"]
+        carbonation:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    RecipeInput:
+      type: object
+      required: [name, style]
+      properties:
+        name:
+          type: string
+        style:
+          type: string
+        description:
+          type: string
+        malts:
+          type: string
+        hops:
+          type: string
+        yeasts:
+          type: string
+        adjuncts:
+          type: string
+        waterProfile:
+          type: string
+        mashProfile:
+          type: string
+        boilTimeMins:
+          type: integer
+        hopAdditions:
+          type: string
+        fermentationProfile:
+          type: string
+        maturationProfile:
+          type: string
+        carbonation:
+          type: string
+        notes:
+          type: string
+
+    RecipeUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        style:
+          type: string
+        description:
+          type: string
+        malts:
+          type: string
+        hops:
+          type: string
+        yeasts:
+          type: string
+        adjuncts:
+          type: string
+        waterProfile:
+          type: string
+        mashProfile:
+          type: string
+        boilTimeMins:
+          type: integer
+        hopAdditions:
+          type: string
+        fermentationProfile:
+          type: string
+        maturationProfile:
+          type: string
+        carbonation:
+          type: string
+        notes:
+          type: string
+
+    # ─── Productions ───────────────────────────────────────────────────────────
+    Production:
+      type: object
+      required: [id, recipeId, recipeName, status, currentStage, startedAt, createdAt]
+      properties:
+        id:
+          type: integer
+        recipeId:
+          type: integer
+        recipeName:
+          type: string
+        status:
+          type: string
+          enum: [pending, running, paused, completed, cancelled]
+        currentStage:
+          type: string
+          enum: [mashing, boiling, whirlpool, cooling, fermentation, maturation, cip, done]
+        stageStartedAt:
+          type: ["string", "null"]
+        stageElapsedMins:
+          type: ["integer", "null"]
+        stageRemainingMins:
+          type: ["integer", "null"]
+        notes:
+          type: ["string", "null"]
+        startedAt:
+          type: string
+        completedAt:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    ProductionInput:
+      type: object
+      required: [recipeId]
+      properties:
+        recipeId:
+          type: integer
+        notes:
+          type: string
+
+    ProductionNoteInput:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+
+    # ─── Equipment ─────────────────────────────────────────────────────────────
+    Equipment:
+      type: object
+      required: [id, name, type, status, connected, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum: [fermenter, kettle, mash_tun, hlt, pump, valve, chiller, co2_tank, other]
+        status:
+          type: string
+          enum: [operational, maintenance, offline, error]
+        connected:
+          type: boolean
+        firmwareVersion:
+          type: ["string", "null"]
+        location:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    EquipmentInput:
+      type: object
+      required: [name, type]
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: [fermenter, kettle, mash_tun, hlt, pump, valve, chiller, co2_tank, other]
+        firmwareVersion:
+          type: string
+        location:
+          type: string
+        notes:
+          type: string
+
+    EquipmentUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: [fermenter, kettle, mash_tun, hlt, pump, valve, chiller, co2_tank, other]
+        status:
+          type: string
+          enum: [operational, maintenance, offline, error]
+        connected:
+          type: boolean
+        firmwareVersion:
+          type: string
+        location:
+          type: string
+        notes:
+          type: string
+
+    # ─── Sensors ───────────────────────────────────────────────────────────────
+    Sensor:
+      type: object
+      required: [id, name, type, unit, currentValue, equipmentId, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum: [temperature, pressure, ph, density, flow, level, co2, humidity, voltage]
+        unit:
+          type: string
+        currentValue:
+          type: number
+        minThreshold:
+          type: ["number", "null"]
+        maxThreshold:
+          type: ["number", "null"]
+        equipmentId:
+          type: integer
+        equipmentName:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [normal, warning, critical, offline]
+        createdAt:
+          type: string
+
+    SensorInput:
+      type: object
+      required: [name, type, unit, equipmentId]
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: [temperature, pressure, ph, density, flow, level, co2, humidity, voltage]
+        unit:
+          type: string
+        minThreshold:
+          type: number
+        maxThreshold:
+          type: number
+        equipmentId:
+          type: integer
+
+    SensorUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        minThreshold:
+          type: number
+        maxThreshold:
+          type: number
+
+    SensorReading:
+      type: object
+      required: [sensorId, sensorName, type, unit, value, timestamp]
+      properties:
+        sensorId:
+          type: integer
+        sensorName:
+          type: string
+        type:
+          type: string
+        unit:
+          type: string
+        value:
+          type: number
+        status:
+          type: string
+          enum: [normal, warning, critical, offline]
+        timestamp:
+          type: string
+
+    # ─── Actuators ─────────────────────────────────────────────────────────────
+    Actuator:
+      type: object
+      required: [id, name, type, isOn, equipmentId, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum: [heater, pump, valve, agitator, cooler, fan, light]
+        isOn:
+          type: boolean
+        equipmentId:
+          type: integer
+        equipmentName:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    ActuatorInput:
+      type: object
+      required: [name, type, equipmentId]
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: [heater, pump, valve, agitator, cooler, fan, light]
+        equipmentId:
+          type: integer
+        notes:
+          type: string
+
+    # ─── Alarms ────────────────────────────────────────────────────────────────
+    Alarm:
+      type: object
+      required: [id, message, priority, severity, acknowledged, triggeredAt, createdAt]
+      properties:
+        id:
+          type: integer
+        message:
+          type: string
+        priority:
+          type: string
+          enum: [low, medium, high, critical]
+        severity:
+          type: string
+          enum: [info, warning, error, emergency]
+        acknowledged:
+          type: boolean
+        acknowledgedAt:
+          type: ["string", "null"]
+        equipmentId:
+          type: ["integer", "null"]
+        equipmentName:
+          type: ["string", "null"]
+        sensorId:
+          type: ["integer", "null"]
+        triggeredAt:
+          type: string
+        createdAt:
+          type: string
+
+    AlarmInput:
+      type: object
+      required: [message, priority, severity]
+      properties:
+        message:
+          type: string
+        priority:
+          type: string
+          enum: [low, medium, high, critical]
+        severity:
+          type: string
+          enum: [info, warning, error, emergency]
+        equipmentId:
+          type: integer
+        sensorId:
+          type: integer
+
+    # ─── Events ────────────────────────────────────────────────────────────────
+    Event:
+      type: object
+      required: [id, type, message, createdAt]
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum: [production_started, production_paused, production_resumed, production_completed, production_cancelled, stage_changed, note_added, alarm_triggered, alarm_acknowledged, sensor_alert, equipment_connected, equipment_disconnected]
+        message:
+          type: string
+        productionId:
+          type: ["integer", "null"]
+        equipmentId:
+          type: ["integer", "null"]
+        createdAt:
+          type: string
+
+    # ─── Reports ───────────────────────────────────────────────────────────────
+    ProductionReport:
+      type: object
+      required: [totalRuns, completedRuns, cancelledRuns, avgDurationHours, byStage]
+      properties:
+        totalRuns:
+          type: integer
+        completedRuns:
+          type: integer
+        cancelledRuns:
+          type: integer
+        avgDurationHours:
+          type: number
+        byStage:
+          type: array
+          items:
+            type: object
+            required: [stage, count]
+            properties:
+              stage:
+                type: string
+              count:
+                type: integer
+
+    SensorHistorySeries:
+      type: object
+      required: [sensorId, sensorName, type, unit, readings]
+      properties:
+        sensorId:
+          type: integer
+        sensorName:
+          type: string
+        type:
+          type: string
+        unit:
+          type: string
+        readings:
+          type: array
+          items:
+            $ref: "#/components/schemas/SensorReading"
+
+    AlarmReport:
+      type: object
+      required: [total, acknowledged, unacknowledged, bySeverity]
+      properties:
+        total:
+          type: integer
+        acknowledged:
+          type: integer
+        unacknowledged:
+          type: integer
+        bySeverity:
+          type: array
+          items:
+            type: object
+            required: [severity, count]
+            properties:
+              severity:
+                type: string
+              count:
+                type: integer
+
+    # ─── Users ─────────────────────────────────────────────────────────────────
+    User:
+      type: object
+      required: [id, email, name, role, active, createdAt]
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum: [admin, brewmaster, operator, visitor]
+        active:
+          type: boolean
+        lastLogin:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    UserInput:
+      type: object
+      required: [email, name, role]
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum: [admin, brewmaster, operator, visitor]
+
+    UserUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        role:
+          type: string
+          enum: [admin, brewmaster, operator, visitor]
+        active:
+          type: boolean
+
+    # ─── AI ────────────────────────────────────────────────────────────────────
+    AiMessageInput:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+        context:
+          type: ["string", "null"]
+
+    AiMessage:
+      type: object
+      required: [id, role, content, createdAt]
+      properties:
+        id:
+          type: integer
+        role:
+          type: string
+          enum: [user, assistant]
+        content:
+          type: string
+        createdAt:
+          type: string
+
+    AiDiagnoseInput:
+      type: object
+      required: [productionId]
+      properties:
+        productionId:
+          type: integer
+
+    AiDiagnosisResult:
+      type: object
+      required: [diagnosis, suggestions, confidence]
+      properties:
+        diagnosis:
+          type: string
+        suggestions:
+          type: array
+          items:
+            type: string
+        confidence:
+          type: number
+        warnings:
+          type: array
+          items:
+            type: string

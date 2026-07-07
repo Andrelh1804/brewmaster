@@ -1,0 +1,2 @@
+- [Drizzle-to-Zod date serialization](drizzle-zod-dates.md) — always call toJSON() before .parse() when Drizzle rows go into OpenAPI-generated Zod schemas
+- [BrewMaster architecture](brewmaster-arch.md) — OpenAPI-first stack: spec → Orval codegen → Zod (server) + React Query hooks (frontend)

@@ -1,0 +1,224 @@
+PROMPT MASTER – BrewMaster AI Platform (Fase 1)
+
+Você é um Arquiteto de Software Sênior, Especialista em IoT, Sistemas Embarcados, Desenvolvimento Full Stack, UX/UI, DevOps e Inteligência Artificial.
+
+Sua missão é desenvolver uma plataforma SaaS profissional chamada BrewMaster AI, destinada à automação completa da produção de cerveja artesanal utilizando ESP32.
+
+Nesta primeira fase, NÃO desenvolva o firmware do ESP32. O foco será exclusivamente na construção da plataforma web, backend, banco de dados, APIs e arquitetura de comunicação. Todo o sistema deve ser preparado para integração futura com o ESP32.
+
+Objetivo
+
+Construir uma plataforma moderna, escalável, responsiva e preparada para produção, semelhante a um sistema SCADA/HMI industrial, com monitoramento em tempo real, gerenciamento de receitas cervejeiras, controle dos processos produtivos, histórico, relatórios, gerenciamento de equipamentos e comunicação com dispositivos IoT.
+
+Stack Tecnológica
+
+Frontend:
+
+- React
+- Vite
+- TypeScript
+- Tailwind CSS
+- React Router
+- React Query
+- ApexCharts
+- React Hook Form
+
+Backend:
+
+- Node.js
+- NestJS
+- TypeScript
+
+Banco de Dados:
+
+- PostgreSQL
+- Prisma ORM
+
+Comunicação:
+
+- REST API
+- WebSocket
+- MQTT (simulado nesta fase)
+
+Autenticação:
+
+- JWT
+- Controle de acesso por perfis (Administrador, Mestre Cervejeiro, Operador e Visitante)
+
+Infraestrutura:
+
+- Docker
+- Docker Compose
+- Variáveis de ambiente
+- Estrutura pronta para deploy
+
+Interface
+
+Criar uma interface moderna inspirada em supervisórios industriais (SCADA), com tema escuro, indicadores coloridos, gráficos em tempo real, navegação intuitiva e responsiva.
+
+Estrutura de Menus
+
+- Dashboard
+- Produção
+- Receitas
+- Brassagem
+- Fervura
+- Whirlpool
+- Resfriamento
+- Fermentação
+- Maturação
+- CIP (Limpeza)
+- Sensores
+- Atuadores
+- Equipamentos
+- Alarmes
+- Histórico
+- Relatórios
+- Usuários
+- Configurações
+- IA Assistente
+- Atualizações
+- Logs
+- API
+
+Dashboard
+
+Exibir cartões e gráficos para:
+
+- Estado da produção
+- Etapa atual
+- Tempo restante
+- Temperaturas
+- Pressões
+- pH
+- Densidade
+- Consumo de energia
+- Alarmes ativos
+- Equipamentos conectados
+- Status da comunicação IoT
+- Eventos recentes
+
+Todos os dados deverão ser simulados nesta fase.
+
+Gerenciamento de Receitas
+
+Permitir criar, editar, excluir, importar e exportar receitas contendo:
+
+- Nome
+- Estilo
+- Maltes
+- Lúpulos
+- Leveduras
+- Adjuntos
+- Perfil de água
+- Rampas de mosturação
+- Tempo de fervura
+- Adições de lúpulo
+- Perfil de fermentação
+- Perfil de maturação
+- Carbonatação
+- Observações
+
+Produção
+
+Criar um assistente que execute automaticamente uma receita.
+
+Permitir:
+
+- Iniciar produção
+- Pausar
+- Retomar
+- Cancelar
+- Pular etapa
+- Alterar temperatura
+- Alterar tempo
+- Inserir observações
+- Operação manual
+- Operação automática
+
+Comunicação IoT
+
+Criar uma camada de abstração preparada para integrar futuramente:
+
+- ESP32
+- MQTT
+- WebSocket
+- HTTP
+
+Enquanto não houver hardware, criar um simulador que gere dados realistas para sensores e equipamentos.
+
+Banco de Dados
+
+Criar tabelas para:
+
+- Usuários
+- Receitas
+- Produções
+- Equipamentos
+- Sensores
+- Atuadores
+- Alarmes
+- Eventos
+- Histórico
+- Configurações
+- Logs
+- Notificações
+
+Utilizar Prisma ORM com migrations.
+
+Sistema de Alarmes
+
+Implementar:
+
+- Prioridades
+- Severidade
+- Confirmação de alarmes
+- Histórico
+- Registro de data e hora
+- Preparação para envio por e-mail, WhatsApp, Telegram e Push Notifications.
+
+Relatórios
+
+Gerar:
+
+- Produções
+- Consumo energético
+- Eficiência
+- Histórico de temperaturas
+- Alarmes
+- Receita utilizada
+- Tempo de produção
+
+Exportar para PDF, CSV e Excel.
+
+Inteligência Artificial
+
+Criar um módulo denominado "Assistente BrewMaster AI", preparado para integrar modelos de IA futuramente.
+
+As funcionalidades previstas incluem:
+
+- Diagnóstico de falhas
+- Sugestão de melhorias
+- Otimização das receitas
+- Recomendações de parâmetros
+- Respostas a perguntas do operador
+
+Nesta fase, utilizar dados simulados.
+
+Qualidade
+
+Todo o código deve ser:
+
+- Modular
+- Escalável
+- Tipado
+- Documentado
+- Responsivo
+- Pronto para produção
+- Sem código duplicado
+- Seguindo princípios SOLID
+- Utilizando Clean Architecture
+
+Resultado esperado
+
+Ao final desta fase, entregar uma plataforma totalmente navegável com todas as telas, menus, APIs, banco de dados, autenticação, simulação de sensores, comunicação preparada para o ESP32 e documentação completa do projeto, deixando apenas a integração do firmware como próxima etapa do desenvolvimento.
