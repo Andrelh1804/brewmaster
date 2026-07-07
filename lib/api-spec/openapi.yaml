@@ -34,6 +34,10 @@ tags:
     description: AI assistant
   - name: simulator
     description: IoT data simulator
+  - name: scada
+    description: SCADA flowchart and industrial state
+  - name: devices
+    description: IoT device management (ESP32 and nodes)
 
 paths:
   /healthz:
@@ -868,6 +872,169 @@ paths:
                 items:
                   $ref: "#/components/schemas/SensorReading"
 
+  # ─── Industrial Dashboard ────────────────────────────────────────────────────
+  /dashboard/industrial:
+    get:
+      operationId: getIndustrialMetrics
+      tags: [dashboard]
+      summary: Get real-time industrial metrics (energy, water, efficiency)
+      responses:
+        "200":
+          description: Industrial metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IndustrialMetrics"
+
+  # ─── SCADA ──────────────────────────────────────────────────────────────────
+  /scada/state:
+    get:
+      operationId: getScadaState
+      tags: [scada]
+      summary: Get SCADA flowchart equipment states
+      responses:
+        "200":
+          description: SCADA equipment state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScadaState"
+
+  # ─── Devices ────────────────────────────────────────────────────────────────
+  /devices:
+    get:
+      operationId: listDevices
+      tags: [devices]
+      summary: List all registered IoT devices
+      responses:
+        "200":
+          description: Devices list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Device"
+    post:
+      operationId: createDevice
+      tags: [devices]
+      summary: Register a new IoT device
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+
+  /devices/{id}:
+    get:
+      operationId: getDevice
+      tags: [devices]
+      summary: Get a device by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Device
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateDevice
+      tags: [devices]
+      summary: Update a device
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+    delete:
+      operationId: deleteDevice
+      tags: [devices]
+      summary: Delete a device
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /devices/{id}/heartbeat:
+    post:
+      operationId: deviceHeartbeat
+      tags: [devices]
+      summary: Update device heartbeat (called by the device itself)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceHeartbeatInput"
+      responses:
+        "200":
+          description: Heartbeat acknowledged
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+
+  # ─── Recipe Duplicate ────────────────────────────────────────────────────────
+  /recipes/{id}/duplicate:
+    post:
+      operationId: duplicateRecipe
+      tags: [recipes]
+      summary: Duplicate a recipe
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "201":
+          description: Duplicated recipe
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+
 components:
   schemas:
     HealthStatus:
@@ -921,6 +1088,26 @@ components:
           type: string
         description:
           type: ["string", "null"]
+        imageUrl:
+          type: ["string", "null"]
+        ibu:
+          type: ["number", "null"]
+        og:
+          type: ["number", "null"]
+        fg:
+          type: ["number", "null"]
+        abv:
+          type: ["number", "null"]
+        srm:
+          type: ["number", "null"]
+        batchSizeL:
+          type: ["number", "null"]
+        estimatedCost:
+          type: ["number", "null"]
+        suggestedPrice:
+          type: ["number", "null"]
+        profitMargin:
+          type: ["number", "null"]
         malts:
           type: ["string", "null"]
         hops:
@@ -928,6 +1115,8 @@ components:
         yeasts:
           type: ["string", "null"]
         adjuncts:
+          type: ["string", "null"]
+        salts:
           type: ["string", "null"]
         waterProfile:
           type: ["string", "null"]
@@ -960,6 +1149,26 @@ components:
           type: string
         description:
           type: string
+        imageUrl:
+          type: string
+        ibu:
+          type: number
+        og:
+          type: number
+        fg:
+          type: number
+        abv:
+          type: number
+        srm:
+          type: number
+        batchSizeL:
+          type: number
+        estimatedCost:
+          type: number
+        suggestedPrice:
+          type: number
+        profitMargin:
+          type: number
         malts:
           type: string
         hops:
@@ -967,6 +1176,8 @@ components:
         yeasts:
           type: string
         adjuncts:
+          type: string
+        salts:
           type: string
         waterProfile:
           type: string
@@ -994,6 +1205,26 @@ components:
           type: string
         description:
           type: string
+        imageUrl:
+          type: string
+        ibu:
+          type: number
+        og:
+          type: number
+        fg:
+          type: number
+        abv:
+          type: number
+        srm:
+          type: number
+        batchSizeL:
+          type: number
+        estimatedCost:
+          type: number
+        suggestedPrice:
+          type: number
+        profitMargin:
+          type: number
         malts:
           type: string
         hops:
@@ -1001,6 +1232,8 @@ components:
         yeasts:
           type: string
         adjuncts:
+          type: string
+        salts:
           type: string
         waterProfile:
           type: string
@@ -1463,3 +1696,166 @@ components:
           type: array
           items:
             type: string
+
+    # ─── Industrial Metrics ─────────────────────────────────────────────────────
+    IndustrialMetrics:
+      type: object
+      required: [powerKW, powerKWhToday, waterLitersPerHour, waterLitersToday, gasM3Today, efficiency, productionToday, productionMonth, systemHealth, mqttStatus, wsStatus, dbStatus, cloudStatus, timestamp]
+      properties:
+        powerKW:
+          type: number
+        powerKWhToday:
+          type: number
+        waterLitersPerHour:
+          type: number
+        waterLitersToday:
+          type: number
+        gasM3Today:
+          type: number
+        efficiency:
+          type: number
+        productionToday:
+          type: integer
+        productionMonth:
+          type: integer
+        systemHealth:
+          type: string
+          enum: [good, warning, critical]
+        mqttStatus:
+          type: string
+          enum: [connected, disconnected, error]
+        wsStatus:
+          type: string
+          enum: [connected, disconnected, error]
+        dbStatus:
+          type: string
+          enum: [connected, disconnected, error]
+        cloudStatus:
+          type: string
+          enum: [connected, disconnected, error]
+        timestamp:
+          type: string
+
+    # ─── SCADA ─────────────────────────────────────────────────────────────────
+    ScadaEquipment:
+      type: object
+      required: [id, name, type, state]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+        state:
+          type: string
+          enum: [off, running, waiting, cooling, fault]
+        temperature:
+          type: ["number", "null"]
+        pressure:
+          type: ["number", "null"]
+        level:
+          type: ["number", "null"]
+        flow:
+          type: ["number", "null"]
+        ph:
+          type: ["number", "null"]
+        isOn:
+          type: boolean
+
+    ScadaState:
+      type: object
+      required: [equipment, activeStage, timestamp]
+      properties:
+        equipment:
+          type: array
+          items:
+            $ref: "#/components/schemas/ScadaEquipment"
+        activeStage:
+          type: ["string", "null"]
+        activeProductionId:
+          type: ["integer", "null"]
+        timestamp:
+          type: string
+
+    # ─── Devices ───────────────────────────────────────────────────────────────
+    Device:
+      type: object
+      required: [id, name, deviceId, type, status, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        deviceId:
+          type: string
+        type:
+          type: string
+          enum: [esp32, sensor_node, actuator_node, gateway, controller]
+        ipAddress:
+          type: ["string", "null"]
+        firmwareVersion:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [online, offline, error, unknown]
+        lastHeartbeat:
+          type: ["string", "null"]
+        rssi:
+          type: ["integer", "null"]
+        location:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    DeviceInput:
+      type: object
+      required: [name, deviceId, type]
+      properties:
+        name:
+          type: string
+        deviceId:
+          type: string
+        type:
+          type: string
+          enum: [esp32, sensor_node, actuator_node, gateway, controller]
+        ipAddress:
+          type: string
+        firmwareVersion:
+          type: string
+        location:
+          type: string
+        notes:
+          type: string
+
+    DeviceUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: [esp32, sensor_node, actuator_node, gateway, controller]
+        ipAddress:
+          type: string
+        firmwareVersion:
+          type: string
+        status:
+          type: string
+          enum: [online, offline, error, unknown]
+        location:
+          type: string
+        notes:
+          type: string
+
+    DeviceHeartbeatInput:
+      type: object
+      properties:
+        ipAddress:
+          type: string
+        firmwareVersion:
+          type: string
+        rssi:
+          type: integer

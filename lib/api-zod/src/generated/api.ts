@@ -80,10 +80,21 @@ export const ListRecipesResponseItem = zod.object({
   "name": zod.string(),
   "style": zod.string(),
   "description": zod.string().nullish(),
+  "imageUrl": zod.string().nullish(),
+  "ibu": zod.number().nullish(),
+  "og": zod.number().nullish(),
+  "fg": zod.number().nullish(),
+  "abv": zod.number().nullish(),
+  "srm": zod.number().nullish(),
+  "batchSizeL": zod.number().nullish(),
+  "estimatedCost": zod.number().nullish(),
+  "suggestedPrice": zod.number().nullish(),
+  "profitMargin": zod.number().nullish(),
   "malts": zod.string().nullish(),
   "hops": zod.string().nullish(),
   "yeasts": zod.string().nullish(),
   "adjuncts": zod.string().nullish(),
+  "salts": zod.string().nullish(),
   "waterProfile": zod.string().nullish(),
   "mashProfile": zod.string().nullish(),
   "boilTimeMins": zod.number().nullish(),
@@ -105,10 +116,21 @@ export const CreateRecipeBody = zod.object({
   "name": zod.string(),
   "style": zod.string(),
   "description": zod.string().optional(),
+  "imageUrl": zod.string().optional(),
+  "ibu": zod.number().optional(),
+  "og": zod.number().optional(),
+  "fg": zod.number().optional(),
+  "abv": zod.number().optional(),
+  "srm": zod.number().optional(),
+  "batchSizeL": zod.number().optional(),
+  "estimatedCost": zod.number().optional(),
+  "suggestedPrice": zod.number().optional(),
+  "profitMargin": zod.number().optional(),
   "malts": zod.string().optional(),
   "hops": zod.string().optional(),
   "yeasts": zod.string().optional(),
   "adjuncts": zod.string().optional(),
+  "salts": zod.string().optional(),
   "waterProfile": zod.string().optional(),
   "mashProfile": zod.string().optional(),
   "boilTimeMins": zod.number().optional(),
@@ -124,10 +146,21 @@ export const CreateRecipeResponse = zod.object({
   "name": zod.string(),
   "style": zod.string(),
   "description": zod.string().nullish(),
+  "imageUrl": zod.string().nullish(),
+  "ibu": zod.number().nullish(),
+  "og": zod.number().nullish(),
+  "fg": zod.number().nullish(),
+  "abv": zod.number().nullish(),
+  "srm": zod.number().nullish(),
+  "batchSizeL": zod.number().nullish(),
+  "estimatedCost": zod.number().nullish(),
+  "suggestedPrice": zod.number().nullish(),
+  "profitMargin": zod.number().nullish(),
   "malts": zod.string().nullish(),
   "hops": zod.string().nullish(),
   "yeasts": zod.string().nullish(),
   "adjuncts": zod.string().nullish(),
+  "salts": zod.string().nullish(),
   "waterProfile": zod.string().nullish(),
   "mashProfile": zod.string().nullish(),
   "boilTimeMins": zod.number().nullish(),
@@ -153,10 +186,21 @@ export const GetRecipeResponse = zod.object({
   "name": zod.string(),
   "style": zod.string(),
   "description": zod.string().nullish(),
+  "imageUrl": zod.string().nullish(),
+  "ibu": zod.number().nullish(),
+  "og": zod.number().nullish(),
+  "fg": zod.number().nullish(),
+  "abv": zod.number().nullish(),
+  "srm": zod.number().nullish(),
+  "batchSizeL": zod.number().nullish(),
+  "estimatedCost": zod.number().nullish(),
+  "suggestedPrice": zod.number().nullish(),
+  "profitMargin": zod.number().nullish(),
   "malts": zod.string().nullish(),
   "hops": zod.string().nullish(),
   "yeasts": zod.string().nullish(),
   "adjuncts": zod.string().nullish(),
+  "salts": zod.string().nullish(),
   "waterProfile": zod.string().nullish(),
   "mashProfile": zod.string().nullish(),
   "boilTimeMins": zod.number().nullish(),
@@ -181,10 +225,21 @@ export const UpdateRecipeBody = zod.object({
   "name": zod.string().optional(),
   "style": zod.string().optional(),
   "description": zod.string().optional(),
+  "imageUrl": zod.string().optional(),
+  "ibu": zod.number().optional(),
+  "og": zod.number().optional(),
+  "fg": zod.number().optional(),
+  "abv": zod.number().optional(),
+  "srm": zod.number().optional(),
+  "batchSizeL": zod.number().optional(),
+  "estimatedCost": zod.number().optional(),
+  "suggestedPrice": zod.number().optional(),
+  "profitMargin": zod.number().optional(),
   "malts": zod.string().optional(),
   "hops": zod.string().optional(),
   "yeasts": zod.string().optional(),
   "adjuncts": zod.string().optional(),
+  "salts": zod.string().optional(),
   "waterProfile": zod.string().optional(),
   "mashProfile": zod.string().optional(),
   "boilTimeMins": zod.number().optional(),
@@ -200,10 +255,21 @@ export const UpdateRecipeResponse = zod.object({
   "name": zod.string(),
   "style": zod.string(),
   "description": zod.string().nullish(),
+  "imageUrl": zod.string().nullish(),
+  "ibu": zod.number().nullish(),
+  "og": zod.number().nullish(),
+  "fg": zod.number().nullish(),
+  "abv": zod.number().nullish(),
+  "srm": zod.number().nullish(),
+  "batchSizeL": zod.number().nullish(),
+  "estimatedCost": zod.number().nullish(),
+  "suggestedPrice": zod.number().nullish(),
+  "profitMargin": zod.number().nullish(),
   "malts": zod.string().nullish(),
   "hops": zod.string().nullish(),
   "yeasts": zod.string().nullish(),
   "adjuncts": zod.string().nullish(),
+  "salts": zod.string().nullish(),
   "waterProfile": zod.string().nullish(),
   "mashProfile": zod.string().nullish(),
   "boilTimeMins": zod.number().nullish(),
@@ -990,5 +1056,232 @@ export const SimulatorTickResponseItem = zod.object({
   "timestamp": zod.string()
 })
 export const SimulatorTickResponse = zod.array(SimulatorTickResponseItem)
+
+
+/**
+ * @summary Get real-time industrial metrics (energy, water, efficiency)
+ */
+export const GetIndustrialMetricsResponse = zod.object({
+  "powerKW": zod.number(),
+  "powerKWhToday": zod.number(),
+  "waterLitersPerHour": zod.number(),
+  "waterLitersToday": zod.number(),
+  "gasM3Today": zod.number(),
+  "efficiency": zod.number(),
+  "productionToday": zod.number(),
+  "productionMonth": zod.number(),
+  "systemHealth": zod.enum(['good', 'warning', 'critical']),
+  "mqttStatus": zod.enum(['connected', 'disconnected', 'error']),
+  "wsStatus": zod.enum(['connected', 'disconnected', 'error']),
+  "dbStatus": zod.enum(['connected', 'disconnected', 'error']),
+  "cloudStatus": zod.enum(['connected', 'disconnected', 'error']),
+  "timestamp": zod.string()
+})
+
+
+/**
+ * @summary Get SCADA flowchart equipment states
+ */
+export const GetScadaStateResponse = zod.object({
+  "equipment": zod.array(zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "type": zod.string(),
+  "state": zod.enum(['off', 'running', 'waiting', 'cooling', 'fault']),
+  "temperature": zod.number().nullish(),
+  "pressure": zod.number().nullish(),
+  "level": zod.number().nullish(),
+  "flow": zod.number().nullish(),
+  "ph": zod.number().nullish(),
+  "isOn": zod.boolean().optional()
+})),
+  "activeStage": zod.string().nullable(),
+  "activeProductionId": zod.number().nullish(),
+  "timestamp": zod.string()
+})
+
+
+/**
+ * @summary List all registered IoT devices
+ */
+export const ListDevicesResponseItem = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "deviceId": zod.string(),
+  "type": zod.enum(['esp32', 'sensor_node', 'actuator_node', 'gateway', 'controller']),
+  "ipAddress": zod.string().nullish(),
+  "firmwareVersion": zod.string().nullish(),
+  "status": zod.enum(['online', 'offline', 'error', 'unknown']),
+  "lastHeartbeat": zod.string().nullish(),
+  "rssi": zod.number().nullish(),
+  "location": zod.string().nullish(),
+  "notes": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+export const ListDevicesResponse = zod.array(ListDevicesResponseItem)
+
+
+/**
+ * @summary Register a new IoT device
+ */
+export const CreateDeviceBody = zod.object({
+  "name": zod.string(),
+  "deviceId": zod.string(),
+  "type": zod.enum(['esp32', 'sensor_node', 'actuator_node', 'gateway', 'controller']),
+  "ipAddress": zod.string().optional(),
+  "firmwareVersion": zod.string().optional(),
+  "location": zod.string().optional(),
+  "notes": zod.string().optional()
+})
+
+export const CreateDeviceResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "deviceId": zod.string(),
+  "type": zod.enum(['esp32', 'sensor_node', 'actuator_node', 'gateway', 'controller']),
+  "ipAddress": zod.string().nullish(),
+  "firmwareVersion": zod.string().nullish(),
+  "status": zod.enum(['online', 'offline', 'error', 'unknown']),
+  "lastHeartbeat": zod.string().nullish(),
+  "rssi": zod.number().nullish(),
+  "location": zod.string().nullish(),
+  "notes": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Get a device by ID
+ */
+export const GetDeviceParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const GetDeviceResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "deviceId": zod.string(),
+  "type": zod.enum(['esp32', 'sensor_node', 'actuator_node', 'gateway', 'controller']),
+  "ipAddress": zod.string().nullish(),
+  "firmwareVersion": zod.string().nullish(),
+  "status": zod.enum(['online', 'offline', 'error', 'unknown']),
+  "lastHeartbeat": zod.string().nullish(),
+  "rssi": zod.number().nullish(),
+  "location": zod.string().nullish(),
+  "notes": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Update a device
+ */
+export const UpdateDeviceParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateDeviceBody = zod.object({
+  "name": zod.string().optional(),
+  "type": zod.enum(['esp32', 'sensor_node', 'actuator_node', 'gateway', 'controller']).optional(),
+  "ipAddress": zod.string().optional(),
+  "firmwareVersion": zod.string().optional(),
+  "status": zod.enum(['online', 'offline', 'error', 'unknown']).optional(),
+  "location": zod.string().optional(),
+  "notes": zod.string().optional()
+})
+
+export const UpdateDeviceResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "deviceId": zod.string(),
+  "type": zod.enum(['esp32', 'sensor_node', 'actuator_node', 'gateway', 'controller']),
+  "ipAddress": zod.string().nullish(),
+  "firmwareVersion": zod.string().nullish(),
+  "status": zod.enum(['online', 'offline', 'error', 'unknown']),
+  "lastHeartbeat": zod.string().nullish(),
+  "rssi": zod.number().nullish(),
+  "location": zod.string().nullish(),
+  "notes": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Delete a device
+ */
+export const DeleteDeviceParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const DeleteDeviceResponse = zod.void()
+
+
+/**
+ * @summary Update device heartbeat (called by the device itself)
+ */
+export const DeviceHeartbeatParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const DeviceHeartbeatBody = zod.object({
+  "ipAddress": zod.string().optional(),
+  "firmwareVersion": zod.string().optional(),
+  "rssi": zod.number().optional()
+})
+
+export const DeviceHeartbeatResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "deviceId": zod.string(),
+  "type": zod.enum(['esp32', 'sensor_node', 'actuator_node', 'gateway', 'controller']),
+  "ipAddress": zod.string().nullish(),
+  "firmwareVersion": zod.string().nullish(),
+  "status": zod.enum(['online', 'offline', 'error', 'unknown']),
+  "lastHeartbeat": zod.string().nullish(),
+  "rssi": zod.number().nullish(),
+  "location": zod.string().nullish(),
+  "notes": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Duplicate a recipe
+ */
+export const DuplicateRecipeParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const DuplicateRecipeResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "style": zod.string(),
+  "description": zod.string().nullish(),
+  "imageUrl": zod.string().nullish(),
+  "ibu": zod.number().nullish(),
+  "og": zod.number().nullish(),
+  "fg": zod.number().nullish(),
+  "abv": zod.number().nullish(),
+  "srm": zod.number().nullish(),
+  "batchSizeL": zod.number().nullish(),
+  "estimatedCost": zod.number().nullish(),
+  "suggestedPrice": zod.number().nullish(),
+  "profitMargin": zod.number().nullish(),
+  "malts": zod.string().nullish(),
+  "hops": zod.string().nullish(),
+  "yeasts": zod.string().nullish(),
+  "adjuncts": zod.string().nullish(),
+  "salts": zod.string().nullish(),
+  "waterProfile": zod.string().nullish(),
+  "mashProfile": zod.string().nullish(),
+  "boilTimeMins": zod.number().nullish(),
+  "hopAdditions": zod.string().nullish(),
+  "fermentationProfile": zod.string().nullish(),
+  "maturationProfile": zod.string().nullish(),
+  "carbonation": zod.string().nullish(),
+  "notes": zod.string().nullish(),
+  "createdAt": zod.string(),
+  "updatedAt": zod.string()
+})
 
 

@@ -1,9 +1,9 @@
-import { useListHistory } from "@workspace/api-client-react";
+import { useListHistory, getListHistoryQueryKey } from "@workspace/api-client-react";
 import { format } from "date-fns";
 import { Activity, Bell, Settings2, CheckCircle2, Clock } from "lucide-react";
 
 export default function History() {
-  const { data: history, isLoading } = useListHistory({ query: { refetchInterval: 10000 } });
+  const { data: history, isLoading } = useListHistory({ query: { refetchInterval: 10000, queryKey: getListHistoryQueryKey() } });
 
   if (isLoading) return <div className="p-6">Carregando logs...</div>;
 

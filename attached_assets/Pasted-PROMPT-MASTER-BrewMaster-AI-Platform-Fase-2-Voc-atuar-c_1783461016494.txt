@@ -1,0 +1,561 @@
+PROMPT MASTER – BrewMaster AI Platform (Fase 2)
+
+Você atuará como Arquiteto de Software, UX/UI Designer, Engenheiro de Automação Industrial, Desenvolvedor Full Stack e Especialista em Sistemas SCADA.
+
+Continue o desenvolvimento da plataforma BrewMaster AI utilizando exatamente a arquitetura criada na Fase 1. Não recrie o projeto; evolua a base existente mantendo os padrões de código, arquitetura e interface.
+
+Objetivo
+
+Transformar a plataforma em um sistema supervisório industrial completo, com telas operacionais, fluxos de produção, simulação em tempo real e preparação para integração futura com múltiplos ESP32.
+
+Melhorias Gerais
+
+- Revisar toda a arquitetura existente.
+- Eliminar códigos duplicados.
+- Melhorar desempenho.
+- Melhorar responsividade.
+- Implementar tema claro e escuro.
+- Adicionar animações suaves.
+- Criar componentes reutilizáveis.
+- Padronizar ícones e cores industriais.
+
+---
+
+Dashboard Industrial
+
+Criar um dashboard semelhante aos utilizados em plantas industriais.
+
+Exibir em tempo real:
+
+- Estado geral da fábrica
+- Produção em andamento
+- Etapa atual
+- Tempo restante
+- Eficiência
+- Consumo elétrico
+- Consumo de água
+- Consumo de gás
+- Produção do dia
+- Produção do mês
+- Temperaturas
+- Pressões
+- Vazões
+- pH
+- Densidade
+- Alarmes ativos
+- Equipamentos ligados
+- Comunicação MQTT
+- Comunicação WebSocket
+- Estado da nuvem
+- Estado do banco de dados
+
+Todos os cartões deverão possuir atualização automática.
+
+---
+
+Fluxograma Animado
+
+Criar uma tela SCADA contendo um fluxograma completo.
+
+Representar visualmente:
+
+Tanque HLT
+
+↓
+
+Mosturador
+
+↓
+
+Recirculação
+
+↓
+
+Filtro
+
+↓
+
+Fervura
+
+↓
+
+Whirlpool
+
+↓
+
+Chiller
+
+↓
+
+Fermentador
+
+↓
+
+Maturador
+
+↓
+
+Envase
+
+Cada equipamento deve mudar de cor conforme o estado:
+
+Cinza = desligado
+
+Verde = funcionando
+
+Amarelo = aguardando
+
+Azul = resfriando
+
+Vermelho = falha
+
+---
+
+Simulação Industrial
+
+Criar um simulador extremamente realista.
+
+Simular:
+
+Temperatura
+
+Aquecimento
+
+Resfriamento
+
+Inércia térmica
+
+Pressão
+
+Vazão
+
+Volume
+
+Nível
+
+pH
+
+Densidade
+
+Bombas
+
+Válvulas
+
+Resistências
+
+Motores
+
+Fermentação
+
+Consumo elétrico
+
+Produção de CO₂
+
+Toda simulação deverá alimentar automaticamente os gráficos.
+
+---
+
+Centro de Controle
+
+Criar uma tela semelhante a um painel industrial.
+
+Permitir:
+
+Ligar bombas
+
+Desligar bombas
+
+Abrir válvulas
+
+Fechar válvulas
+
+Acionar resistências
+
+Modificar temperatura
+
+Modificar setpoint
+
+Modificar tempo
+
+Trocar modo Manual/Automático
+
+Simular falhas
+
+Resetar alarmes
+
+---
+
+Sistema de Receitas
+
+Criar um editor visual.
+
+Cada receita deverá conter:
+
+Imagem
+
+Descrição
+
+Estilo
+
+IBU
+
+OG
+
+FG
+
+ABV
+
+SRM
+
+Maltes
+
+Lúpulos
+
+Leveduras
+
+Adjuntos
+
+Perfil da água
+
+Sais
+
+Rampas
+
+Fervura
+
+Whirlpool
+
+Fermentação
+
+Maturação
+
+Carbonatação
+
+Estimativa de rendimento
+
+Custos
+
+Preço sugerido
+
+Margem de lucro
+
+Permitir duplicar receitas.
+
+---
+
+Cronograma Inteligente
+
+Criar um motor de execução automática.
+
+Exemplo:
+
+08:00
+
+Aquecer água
+
+↓
+
+08:30
+
+Adicionar maltes
+
+↓
+
+09:15
+
+Subir temperatura
+
+↓
+
+10:00
+
+Mash Out
+
+↓
+
+10:30
+
+Lavagem
+
+↓
+
+11:00
+
+Fervura
+
+↓
+
+12:00
+
+Adicionar lúpulo
+
+↓
+
+13:00
+
+Whirlpool
+
+↓
+
+13:20
+
+Resfriamento
+
+↓
+
+14:00
+
+Transferência
+
+↓
+
+Fermentação
+
+↓
+
+Maturação
+
+↓
+
+Envase
+
+Todo cronograma deverá possuir:
+
+Barra de progresso
+
+Tempo restante
+
+Tempo decorrido
+
+Possibilidade de pausar
+
+Editar
+
+Reiniciar
+
+Cancelar
+
+---
+
+Sistema de Alarmes
+
+Criar um centro completo.
+
+Categorias:
+
+Crítico
+
+Alto
+
+Médio
+
+Baixo
+
+Informativo
+
+Cada alarme deverá possuir:
+
+Hora
+
+Descrição
+
+Equipamento
+
+Responsável
+
+Confirmação
+
+Observação
+
+Histórico
+
+---
+
+Centro de Eventos
+
+Registrar tudo.
+
+Login
+
+Logout
+
+Mudança de temperatura
+
+Troca de receita
+
+Erro
+
+Comunicação
+
+Atualizações
+
+Alteração manual
+
+Comandos remotos
+
+---
+
+Relatórios
+
+Criar dashboards analíticos.
+
+Produção
+
+Eficiência
+
+Consumo energético
+
+Consumo de água
+
+Tempo de processo
+
+Custos
+
+Receitas
+
+Alarmes
+
+Disponibilidade
+
+MTBF
+
+MTTR
+
+Exportar em PDF, Excel e CSV.
+
+---
+
+Administração
+
+Criar módulos para:
+
+Usuários
+
+Permissões
+
+Equipamentos
+
+Sensores
+
+Unidades
+
+Backup
+
+Logs
+
+Auditoria
+
+API Keys
+
+Integrações
+
+---
+
+API
+
+Criar documentação completa utilizando OpenAPI (Swagger).
+
+Todas as rotas deverão estar documentadas.
+
+---
+
+Banco de Dados
+
+Criar migrations para todas as novas tabelas.
+
+Implementar índices.
+
+Triggers.
+
+Auditoria.
+
+Soft Delete.
+
+Versionamento.
+
+---
+
+Interface
+
+Criar uma experiência semelhante a um software industrial premium.
+
+Utilizar:
+
+Gráficos modernos
+
+Indicadores animados
+
+Gauge
+
+Velocímetros
+
+Indicadores circulares
+
+Gráficos históricos
+
+Timeline
+
+Mapa da planta
+
+Diagramas
+
+---
+
+Inteligência Artificial
+
+Expandir o módulo BrewMaster AI.
+
+Preparar para:
+
+Previsão de falhas
+
+Análise da fermentação
+
+Correção automática
+
+Sugestão de receitas
+
+Otimização energética
+
+Diagnóstico inteligente
+
+Assistente conversacional
+
+---
+
+Estrutura para ESP32
+
+Sem implementar o firmware.
+
+Preparar toda comunicação.
+
+Criar:
+
+Gateway MQTT
+
+Gateway REST
+
+Gateway WebSocket
+
+Cadastro de dispositivos
+
+Status Online/Offline
+
+Heartbeat
+
+Fila de mensagens
+
+Reconexão automática
+
+---
+
+Final da Fase
+
+Ao concluir, realizar uma auditoria completa do projeto e gerar automaticamente:
+
+- Relatório técnico de arquitetura.
+- Relatório de funcionalidades implementadas.
+- Percentual real de conclusão.
+- Lista de funcionalidades pendentes.
+- Plano detalhado da Fase 3 (integração com ESP32, eletrônica, firmware e comunicação com hardware real).
+- Lista de melhorias para transformar o BrewMaster AI em um produto comercial de nível industrial.

@@ -1,6 +1,7 @@
 import {
   useListAlarms,
   useAcknowledgeAlarm,
+  getListAlarmsQueryKey,
 } from "@workspace/api-client-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -18,7 +19,7 @@ const PRIORITY_LABELS: Record<string, string> = {
 };
 
 export default function Alarms() {
-  const { data: alarms, isLoading } = useListAlarms({ query: { refetchInterval: 5000 } });
+  const { data: alarms, isLoading } = useListAlarms({ query: { refetchInterval: 5000, queryKey: getListAlarmsQueryKey() } });
   const ackAlarm = useAcknowledgeAlarm();
   const queryClient = useQueryClient();
 

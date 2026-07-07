@@ -78,4 +78,23 @@ router.delete("/recipes/:id", async (req, res): Promise<void> => {
   res.sendStatus(204);
 });
 
+router.post("/recipes/:id/duplicate", async (req, res): Promise<void> => {
+  const params = GetRecipeParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: params.error.message });
+    return;
+  }
+  const [original] = await db.select().from(recipesTable).where(eq(recipesTable.id, params.data.id));
+  if (!original) {
+    res.status(404).json({ error: "Recipe not found" });
+    return;
+  }
+  const { id, createdAt, updatedAt, ...rest } = original;
+  const [duplicate] = await db.insert(recipesTable).values({
+    ...rest,
+    name: `${original.name} (Cópia)`,
+  }).returning();
+  res.status(201).json(CreateRecipeResponse.parse(toJSON(duplicate)));
+});
+
 export default router;

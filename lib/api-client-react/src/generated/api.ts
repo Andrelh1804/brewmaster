@@ -30,11 +30,16 @@ import type {
   AlarmInput,
   AlarmReport,
   DashboardOverview,
+  Device,
+  DeviceHeartbeatInput,
+  DeviceInput,
+  DeviceUpdate,
   Equipment,
   EquipmentInput,
   EquipmentUpdate,
   Event,
   HealthStatus,
+  IndustrialMetrics,
   Production,
   ProductionInput,
   ProductionNoteInput,
@@ -42,6 +47,7 @@ import type {
   Recipe,
   RecipeInput,
   RecipeUpdate,
+  ScadaState,
   Sensor,
   SensorHistorySeries,
   SensorInput,
@@ -3603,5 +3609,665 @@ export const useSimulatorTick = <TError = ErrorType<unknown>,
         TContext
       > => {
       return useMutation(getSimulatorTickMutationOptions(options));
+    }
+
+export const getGetIndustrialMetricsUrl = () => {
+
+
+
+
+  return `/api/dashboard/industrial`
+}
+
+/**
+ * @summary Get real-time industrial metrics (energy, water, efficiency)
+ */
+export const getIndustrialMetrics = async ( options?: RequestInit): Promise<IndustrialMetrics> => {
+
+  return customFetch<IndustrialMetrics>(getGetIndustrialMetricsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetIndustrialMetricsQueryKey = () => {
+    return [
+    `/api/dashboard/industrial`
+    ] as const;
+    }
+
+
+export const getGetIndustrialMetricsQueryOptions = <TData = Awaited<ReturnType<typeof getIndustrialMetrics>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getIndustrialMetrics>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetIndustrialMetricsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIndustrialMetrics>>> = ({ signal }) => getIndustrialMetrics({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getIndustrialMetrics>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetIndustrialMetricsQueryResult = NonNullable<Awaited<ReturnType<typeof getIndustrialMetrics>>>
+export type GetIndustrialMetricsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get real-time industrial metrics (energy, water, efficiency)
+ */
+
+export function useGetIndustrialMetrics<TData = Awaited<ReturnType<typeof getIndustrialMetrics>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getIndustrialMetrics>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetIndustrialMetricsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetScadaStateUrl = () => {
+
+
+
+
+  return `/api/scada/state`
+}
+
+/**
+ * @summary Get SCADA flowchart equipment states
+ */
+export const getScadaState = async ( options?: RequestInit): Promise<ScadaState> => {
+
+  return customFetch<ScadaState>(getGetScadaStateUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetScadaStateQueryKey = () => {
+    return [
+    `/api/scada/state`
+    ] as const;
+    }
+
+
+export const getGetScadaStateQueryOptions = <TData = Awaited<ReturnType<typeof getScadaState>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getScadaState>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetScadaStateQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getScadaState>>> = ({ signal }) => getScadaState({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getScadaState>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetScadaStateQueryResult = NonNullable<Awaited<ReturnType<typeof getScadaState>>>
+export type GetScadaStateQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get SCADA flowchart equipment states
+ */
+
+export function useGetScadaState<TData = Awaited<ReturnType<typeof getScadaState>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getScadaState>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetScadaStateQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getListDevicesUrl = () => {
+
+
+
+
+  return `/api/devices`
+}
+
+/**
+ * @summary List all registered IoT devices
+ */
+export const listDevices = async ( options?: RequestInit): Promise<Device[]> => {
+
+  return customFetch<Device[]>(getListDevicesUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListDevicesQueryKey = () => {
+    return [
+    `/api/devices`
+    ] as const;
+    }
+
+
+export const getListDevicesQueryOptions = <TData = Awaited<ReturnType<typeof listDevices>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listDevices>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListDevicesQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listDevices>>> = ({ signal }) => listDevices({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listDevices>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListDevicesQueryResult = NonNullable<Awaited<ReturnType<typeof listDevices>>>
+export type ListDevicesQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List all registered IoT devices
+ */
+
+export function useListDevices<TData = Awaited<ReturnType<typeof listDevices>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listDevices>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListDevicesQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getCreateDeviceUrl = () => {
+
+
+
+
+  return `/api/devices`
+}
+
+/**
+ * @summary Register a new IoT device
+ */
+export const createDevice = async (deviceInput: DeviceInput, options?: RequestInit): Promise<Device> => {
+
+  return customFetch<Device>(getCreateDeviceUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(deviceInput)
+  }
+);}
+
+
+
+
+export const getCreateDeviceMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDevice>>, TError,{data: BodyType<DeviceInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createDevice>>, TError,{data: BodyType<DeviceInput>}, TContext> => {
+
+const mutationKey = ['createDevice'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createDevice>>, {data: BodyType<DeviceInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createDevice(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateDeviceMutationResult = NonNullable<Awaited<ReturnType<typeof createDevice>>>
+    export type CreateDeviceMutationBody = BodyType<DeviceInput>
+    export type CreateDeviceMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Register a new IoT device
+ */
+export const useCreateDevice = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createDevice>>, TError,{data: BodyType<DeviceInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createDevice>>,
+        TError,
+        {data: BodyType<DeviceInput>},
+        TContext
+      > => {
+      return useMutation(getCreateDeviceMutationOptions(options));
+    }
+
+export const getGetDeviceUrl = (id: number,) => {
+
+
+
+
+  return `/api/devices/${id}`
+}
+
+/**
+ * @summary Get a device by ID
+ */
+export const getDevice = async (id: number, options?: RequestInit): Promise<Device> => {
+
+  return customFetch<Device>(getGetDeviceUrl(id),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetDeviceQueryKey = (id: number,) => {
+    return [
+    `/api/devices/${id}`
+    ] as const;
+    }
+
+
+export const getGetDeviceQueryOptions = <TData = Awaited<ReturnType<typeof getDevice>>, TError = ErrorType<void>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getDevice>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDeviceQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDevice>>> = ({ signal }) => getDevice(id, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDevice>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetDeviceQueryResult = NonNullable<Awaited<ReturnType<typeof getDevice>>>
+export type GetDeviceQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get a device by ID
+ */
+
+export function useGetDevice<TData = Awaited<ReturnType<typeof getDevice>>, TError = ErrorType<void>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getDevice>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetDeviceQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getUpdateDeviceUrl = (id: number,) => {
+
+
+
+
+  return `/api/devices/${id}`
+}
+
+/**
+ * @summary Update a device
+ */
+export const updateDevice = async (id: number,
+    deviceUpdate: DeviceUpdate, options?: RequestInit): Promise<Device> => {
+
+  return customFetch<Device>(getUpdateDeviceUrl(id),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(deviceUpdate)
+  }
+);}
+
+
+
+
+export const getUpdateDeviceMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDevice>>, TError,{id: number;data: BodyType<DeviceUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateDevice>>, TError,{id: number;data: BodyType<DeviceUpdate>}, TContext> => {
+
+const mutationKey = ['updateDevice'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDevice>>, {id: number;data: BodyType<DeviceUpdate>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateDevice(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateDeviceMutationResult = NonNullable<Awaited<ReturnType<typeof updateDevice>>>
+    export type UpdateDeviceMutationBody = BodyType<DeviceUpdate>
+    export type UpdateDeviceMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Update a device
+ */
+export const useUpdateDevice = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDevice>>, TError,{id: number;data: BodyType<DeviceUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updateDevice>>,
+        TError,
+        {id: number;data: BodyType<DeviceUpdate>},
+        TContext
+      > => {
+      return useMutation(getUpdateDeviceMutationOptions(options));
+    }
+
+export const getDeleteDeviceUrl = (id: number,) => {
+
+
+
+
+  return `/api/devices/${id}`
+}
+
+/**
+ * @summary Delete a device
+ */
+export const deleteDevice = async (id: number, options?: RequestInit): Promise<void> => {
+
+  return customFetch<void>(getDeleteDeviceUrl(id),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+export const getDeleteDeviceMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDevice>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteDevice>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteDevice'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteDevice>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteDevice(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteDeviceMutationResult = NonNullable<Awaited<ReturnType<typeof deleteDevice>>>
+
+    export type DeleteDeviceMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Delete a device
+ */
+export const useDeleteDevice = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteDevice>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteDevice>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getDeleteDeviceMutationOptions(options));
+    }
+
+export const getDeviceHeartbeatUrl = (id: number,) => {
+
+
+
+
+  return `/api/devices/${id}/heartbeat`
+}
+
+/**
+ * @summary Update device heartbeat (called by the device itself)
+ */
+export const deviceHeartbeat = async (id: number,
+    deviceHeartbeatInput?: DeviceHeartbeatInput, options?: RequestInit): Promise<Device> => {
+
+  return customFetch<Device>(getDeviceHeartbeatUrl(id),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(deviceHeartbeatInput)
+  }
+);}
+
+
+
+
+export const getDeviceHeartbeatMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deviceHeartbeat>>, TError,{id: number;data?: BodyType<DeviceHeartbeatInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deviceHeartbeat>>, TError,{id: number;data?: BodyType<DeviceHeartbeatInput>}, TContext> => {
+
+const mutationKey = ['deviceHeartbeat'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deviceHeartbeat>>, {id: number;data?: BodyType<DeviceHeartbeatInput>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  deviceHeartbeat(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeviceHeartbeatMutationResult = NonNullable<Awaited<ReturnType<typeof deviceHeartbeat>>>
+    export type DeviceHeartbeatMutationBody = BodyType<DeviceHeartbeatInput> | undefined
+    export type DeviceHeartbeatMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Update device heartbeat (called by the device itself)
+ */
+export const useDeviceHeartbeat = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deviceHeartbeat>>, TError,{id: number;data?: BodyType<DeviceHeartbeatInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deviceHeartbeat>>,
+        TError,
+        {id: number;data?: BodyType<DeviceHeartbeatInput>},
+        TContext
+      > => {
+      return useMutation(getDeviceHeartbeatMutationOptions(options));
+    }
+
+export const getDuplicateRecipeUrl = (id: number,) => {
+
+
+
+
+  return `/api/recipes/${id}/duplicate`
+}
+
+/**
+ * @summary Duplicate a recipe
+ */
+export const duplicateRecipe = async (id: number, options?: RequestInit): Promise<Recipe> => {
+
+  return customFetch<Recipe>(getDuplicateRecipeUrl(id),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+export const getDuplicateRecipeMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof duplicateRecipe>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof duplicateRecipe>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['duplicateRecipe'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof duplicateRecipe>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  duplicateRecipe(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DuplicateRecipeMutationResult = NonNullable<Awaited<ReturnType<typeof duplicateRecipe>>>
+
+    export type DuplicateRecipeMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Duplicate a recipe
+ */
+export const useDuplicateRecipe = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof duplicateRecipe>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof duplicateRecipe>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getDuplicateRecipeMutationOptions(options));
     }
 

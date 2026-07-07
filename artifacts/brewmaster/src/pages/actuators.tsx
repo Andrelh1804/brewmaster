@@ -1,6 +1,7 @@
 import {
   useListActuators,
   useToggleActuator,
+  getListActuatorsQueryKey,
 } from "@workspace/api-client-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,7 @@ import { Power, Settings, Fan, Flame, Waves, Lightbulb } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function Actuators() {
-  const { data: actuators, isLoading } = useListActuators({ query: { refetchInterval: 2000 } });
+  const { data: actuators, isLoading } = useListActuators({ query: { refetchInterval: 2000, queryKey: getListActuatorsQueryKey() } });
   const toggleActuator = useToggleActuator();
   const queryClient = useQueryClient();
 

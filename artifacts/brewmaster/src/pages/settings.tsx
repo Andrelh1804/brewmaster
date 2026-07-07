@@ -10,7 +10,7 @@ export default function Settings() {
 
   const handleTick = async () => {
     try {
-      await simTick.mutateAsync({});
+      await simTick.mutateAsync();
       queryClient.invalidateQueries();
     } catch(e) {
       console.error(e);

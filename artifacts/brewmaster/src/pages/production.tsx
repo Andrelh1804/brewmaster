@@ -8,6 +8,7 @@ import {
   useCreateProduction,
   useAddProductionNote,
   useListRecipes,
+  getGetActiveProductionQueryKey,
 } from "@workspace/api-client-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -41,7 +42,7 @@ const STATUS_LABELS: Record<string, string> = {
 
 export default function Production() {
   const queryClient = useQueryClient();
-  const { data: production, isLoading } = useGetActiveProduction({ query: { refetchInterval: 5000 } });
+  const { data: production, isLoading } = useGetActiveProduction({ query: { refetchInterval: 5000, queryKey: getGetActiveProductionQueryKey() } });
   
   const advanceStage = useAdvanceProductionStage();
   const pauseProd = usePauseProduction();

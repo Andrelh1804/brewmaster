@@ -7,3 +7,4 @@ export * from "./actuators";
 export * from "./alarms";
 export * from "./events";
 export * from "./ai_messages";
+export * from "./devices";

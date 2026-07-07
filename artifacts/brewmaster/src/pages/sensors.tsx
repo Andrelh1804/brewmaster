@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   useListSensors,
   useUpdateSensor,
+  getListSensorsQueryKey,
   Sensor
 } from "@workspace/api-client-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,7 +16,7 @@ import { Activity, Settings } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function Sensors() {
-  const { data: sensors, isLoading } = useListSensors({ query: { refetchInterval: 5000 } });
+  const { data: sensors, isLoading } = useListSensors({ query: { refetchInterval: 5000, queryKey: getListSensorsQueryKey() } });
   const [editingSensor, setEditingSensor] = useState<Sensor | null>(null);
 
   if (isLoading) {
@@ -81,9 +82,9 @@ export default function Sensors() {
                       [{sensor.minThreshold ?? '-'} - {sensor.maxThreshold ?? '-'}] {sensor.unit}
                     </div>
                     <div className="w-full h-1 bg-background rounded-full mt-1 overflow-hidden flex">
-                      {sensor.minThreshold !== undefined && sensor.maxThreshold !== undefined && (
+                      {sensor.minThreshold != null && sensor.maxThreshold != null && (
                         <div className="h-full bg-primary relative" style={{ 
-                          marginLeft: `${Math.max(0, Math.min(100, ((sensor.currentValue - sensor.minThreshold) / (sensor.maxThreshold - sensor.minThreshold)) * 100))}%`,
+                          marginLeft: `${Math.max(0, Math.min(100, ((sensor.currentValue - sensor.minThreshold!) / (sensor.maxThreshold! - sensor.minThreshold!)) * 100))}%`,
                           width: '4px'
                         }} />
                       )}

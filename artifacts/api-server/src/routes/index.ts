@@ -12,6 +12,8 @@ import reportsRouter from "./reports";
 import usersRouter from "./users";
 import aiRouter from "./ai";
 import simulatorRouter from "./simulator";
+import devicesRouter from "./devices";
+import scadaRouter from "./scada";
 
 const router: IRouter = Router();
 
@@ -28,5 +30,7 @@ router.use(reportsRouter);
 router.use(usersRouter);
 router.use(aiRouter);
 router.use(simulatorRouter);
+router.use(devicesRouter);
+router.use(scadaRouter);
 
 export default router;

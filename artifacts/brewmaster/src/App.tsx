@@ -1,12 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import NotFound from '@/pages/not-found';
 import { Route, Switch, Router as WouterRouter } from 'wouter';
 import { Sidebar } from '@/components/layout/sidebar';
-import { Menu, Settings2 } from 'lucide-react';
-import { useEffect } from 'react';
+import { Menu, Settings2, Sun, Moon } from 'lucide-react';
 
 import Dashboard from '@/pages/dashboard';
 import Production from '@/pages/production';
@@ -20,15 +19,46 @@ import Reports from '@/pages/reports';
 import Users from '@/pages/users';
 import AiAssistant from '@/pages/ai-assistant';
 import Settings from '@/pages/settings';
+import Scada from '@/pages/scada';
+import ControlCenter from '@/pages/control-center';
+import Devices from '@/pages/devices';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { retry: 1, staleTime: 2000 },
+  },
+});
+
+function useTheme() {
+  const [isDark, setIsDark] = useState(() => {
+    try {
+      const stored = localStorage.getItem('bm-theme');
+      if (stored) return stored === 'dark';
+    } catch {}
+    return true; // default dark
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDark) {
+      root.classList.add('dark');
+      root.classList.remove('light');
+    } else {
+      root.classList.remove('dark');
+      root.classList.add('light');
+    }
+    try { localStorage.setItem('bm-theme', isDark ? 'dark' : 'light'); } catch {}
+  }, [isDark]);
+
+  return { isDark, toggle: () => setIsDark((v) => !v) };
+}
 
 function Router() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { isDark, toggle } = useTheme();
 
   return (
     <div className="flex h-[100dvh] w-full bg-background text-foreground overflow-hidden font-sans">
-      {/* Overlay mobile */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/60 z-20 md:hidden"
@@ -36,10 +66,10 @@ function Router() {
         />
       )}
 
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} isDark={isDark} onThemeToggle={toggle} />
 
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-        {/* Cabeçalho mobile */}
+        {/* Mobile header */}
         <div className="h-14 flex items-center px-4 border-b border-border md:hidden bg-sidebar shrink-0">
           <button
             onClick={() => setSidebarOpen(true)}
@@ -52,6 +82,13 @@ function Router() {
             <Settings2 className="w-5 h-5" />
             <span>BREWMASTER AI</span>
           </div>
+          <button
+            onClick={toggle}
+            className="ml-auto p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-sidebar-accent transition-colors"
+            aria-label="Alternar tema"
+          >
+            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
         </div>
 
         <main className="flex-1 overflow-y-auto overflow-x-hidden relative">
@@ -69,6 +106,9 @@ function Router() {
             <Route path="/ai" component={AiAssistant} />
             <Route path="/settings" component={Settings} />
             <Route path="/logs" component={History} />
+            <Route path="/scada" component={Scada} />
+            <Route path="/control" component={ControlCenter} />
+            <Route path="/devices" component={Devices} />
             <Route component={NotFound} />
           </Switch>
         </main>
@@ -78,10 +118,6 @@ function Router() {
 }
 
 function App() {
-  useEffect(() => {
-    document.documentElement.classList.add('dark');
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

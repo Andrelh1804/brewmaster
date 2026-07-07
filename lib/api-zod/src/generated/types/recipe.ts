@@ -13,6 +13,26 @@ export interface Recipe {
   /** @nullable */
   description?: string | null;
   /** @nullable */
+  imageUrl?: string | null;
+  /** @nullable */
+  ibu?: number | null;
+  /** @nullable */
+  og?: number | null;
+  /** @nullable */
+  fg?: number | null;
+  /** @nullable */
+  abv?: number | null;
+  /** @nullable */
+  srm?: number | null;
+  /** @nullable */
+  batchSizeL?: number | null;
+  /** @nullable */
+  estimatedCost?: number | null;
+  /** @nullable */
+  suggestedPrice?: number | null;
+  /** @nullable */
+  profitMargin?: number | null;
+  /** @nullable */
   malts?: string | null;
   /** @nullable */
   hops?: string | null;
@@ -20,6 +40,8 @@ export interface Recipe {
   yeasts?: string | null;
   /** @nullable */
   adjuncts?: string | null;
+  /** @nullable */
+  salts?: string | null;
   /** @nullable */
   waterProfile?: string | null;
   /** @nullable */

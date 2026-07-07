@@ -81,6 +81,26 @@ export interface Recipe {
   /** @nullable */
   description?: string | null;
   /** @nullable */
+  imageUrl?: string | null;
+  /** @nullable */
+  ibu?: number | null;
+  /** @nullable */
+  og?: number | null;
+  /** @nullable */
+  fg?: number | null;
+  /** @nullable */
+  abv?: number | null;
+  /** @nullable */
+  srm?: number | null;
+  /** @nullable */
+  batchSizeL?: number | null;
+  /** @nullable */
+  estimatedCost?: number | null;
+  /** @nullable */
+  suggestedPrice?: number | null;
+  /** @nullable */
+  profitMargin?: number | null;
+  /** @nullable */
   malts?: string | null;
   /** @nullable */
   hops?: string | null;
@@ -88,6 +108,8 @@ export interface Recipe {
   yeasts?: string | null;
   /** @nullable */
   adjuncts?: string | null;
+  /** @nullable */
+  salts?: string | null;
   /** @nullable */
   waterProfile?: string | null;
   /** @nullable */
@@ -112,10 +134,21 @@ export interface RecipeInput {
   name: string;
   style: string;
   description?: string;
+  imageUrl?: string;
+  ibu?: number;
+  og?: number;
+  fg?: number;
+  abv?: number;
+  srm?: number;
+  batchSizeL?: number;
+  estimatedCost?: number;
+  suggestedPrice?: number;
+  profitMargin?: number;
   malts?: string;
   hops?: string;
   yeasts?: string;
   adjuncts?: string;
+  salts?: string;
   waterProfile?: string;
   mashProfile?: string;
   boilTimeMins?: number;
@@ -130,10 +163,21 @@ export interface RecipeUpdate {
   name?: string;
   style?: string;
   description?: string;
+  imageUrl?: string;
+  ibu?: number;
+  og?: number;
+  fg?: number;
+  abv?: number;
+  srm?: number;
+  batchSizeL?: number;
+  estimatedCost?: number;
+  suggestedPrice?: number;
+  profitMargin?: number;
   malts?: string;
   hops?: string;
   yeasts?: string;
   adjuncts?: string;
+  salts?: string;
   waterProfile?: string;
   mashProfile?: string;
   boilTimeMins?: number;
@@ -600,5 +644,205 @@ export interface AiDiagnosisResult {
   suggestions: string[];
   confidence: number;
   warnings?: string[];
+}
+
+export type IndustrialMetricsSystemHealth = typeof IndustrialMetricsSystemHealth[keyof typeof IndustrialMetricsSystemHealth];
+
+
+export const IndustrialMetricsSystemHealth = {
+  good: 'good',
+  warning: 'warning',
+  critical: 'critical',
+} as const;
+
+export type IndustrialMetricsMqttStatus = typeof IndustrialMetricsMqttStatus[keyof typeof IndustrialMetricsMqttStatus];
+
+
+export const IndustrialMetricsMqttStatus = {
+  connected: 'connected',
+  disconnected: 'disconnected',
+  error: 'error',
+} as const;
+
+export type IndustrialMetricsWsStatus = typeof IndustrialMetricsWsStatus[keyof typeof IndustrialMetricsWsStatus];
+
+
+export const IndustrialMetricsWsStatus = {
+  connected: 'connected',
+  disconnected: 'disconnected',
+  error: 'error',
+} as const;
+
+export type IndustrialMetricsDbStatus = typeof IndustrialMetricsDbStatus[keyof typeof IndustrialMetricsDbStatus];
+
+
+export const IndustrialMetricsDbStatus = {
+  connected: 'connected',
+  disconnected: 'disconnected',
+  error: 'error',
+} as const;
+
+export type IndustrialMetricsCloudStatus = typeof IndustrialMetricsCloudStatus[keyof typeof IndustrialMetricsCloudStatus];
+
+
+export const IndustrialMetricsCloudStatus = {
+  connected: 'connected',
+  disconnected: 'disconnected',
+  error: 'error',
+} as const;
+
+export interface IndustrialMetrics {
+  powerKW: number;
+  powerKWhToday: number;
+  waterLitersPerHour: number;
+  waterLitersToday: number;
+  gasM3Today: number;
+  efficiency: number;
+  productionToday: number;
+  productionMonth: number;
+  systemHealth: IndustrialMetricsSystemHealth;
+  mqttStatus: IndustrialMetricsMqttStatus;
+  wsStatus: IndustrialMetricsWsStatus;
+  dbStatus: IndustrialMetricsDbStatus;
+  cloudStatus: IndustrialMetricsCloudStatus;
+  timestamp: string;
+}
+
+export type ScadaEquipmentState = typeof ScadaEquipmentState[keyof typeof ScadaEquipmentState];
+
+
+export const ScadaEquipmentState = {
+  off: 'off',
+  running: 'running',
+  waiting: 'waiting',
+  cooling: 'cooling',
+  fault: 'fault',
+} as const;
+
+export interface ScadaEquipment {
+  id: number;
+  name: string;
+  type: string;
+  state: ScadaEquipmentState;
+  /** @nullable */
+  temperature?: number | null;
+  /** @nullable */
+  pressure?: number | null;
+  /** @nullable */
+  level?: number | null;
+  /** @nullable */
+  flow?: number | null;
+  /** @nullable */
+  ph?: number | null;
+  isOn?: boolean;
+}
+
+export interface ScadaState {
+  equipment: ScadaEquipment[];
+  /** @nullable */
+  activeStage: string | null;
+  /** @nullable */
+  activeProductionId?: number | null;
+  timestamp: string;
+}
+
+export type DeviceType = typeof DeviceType[keyof typeof DeviceType];
+
+
+export const DeviceType = {
+  esp32: 'esp32',
+  sensor_node: 'sensor_node',
+  actuator_node: 'actuator_node',
+  gateway: 'gateway',
+  controller: 'controller',
+} as const;
+
+export type DeviceStatus = typeof DeviceStatus[keyof typeof DeviceStatus];
+
+
+export const DeviceStatus = {
+  online: 'online',
+  offline: 'offline',
+  error: 'error',
+  unknown: 'unknown',
+} as const;
+
+export interface Device {
+  id: number;
+  name: string;
+  deviceId: string;
+  type: DeviceType;
+  /** @nullable */
+  ipAddress?: string | null;
+  /** @nullable */
+  firmwareVersion?: string | null;
+  status: DeviceStatus;
+  /** @nullable */
+  lastHeartbeat?: string | null;
+  /** @nullable */
+  rssi?: number | null;
+  /** @nullable */
+  location?: string | null;
+  /** @nullable */
+  notes?: string | null;
+  createdAt: string;
+}
+
+export type DeviceInputType = typeof DeviceInputType[keyof typeof DeviceInputType];
+
+
+export const DeviceInputType = {
+  esp32: 'esp32',
+  sensor_node: 'sensor_node',
+  actuator_node: 'actuator_node',
+  gateway: 'gateway',
+  controller: 'controller',
+} as const;
+
+export interface DeviceInput {
+  name: string;
+  deviceId: string;
+  type: DeviceInputType;
+  ipAddress?: string;
+  firmwareVersion?: string;
+  location?: string;
+  notes?: string;
+}
+
+export type DeviceUpdateType = typeof DeviceUpdateType[keyof typeof DeviceUpdateType];
+
+
+export const DeviceUpdateType = {
+  esp32: 'esp32',
+  sensor_node: 'sensor_node',
+  actuator_node: 'actuator_node',
+  gateway: 'gateway',
+  controller: 'controller',
+} as const;
+
+export type DeviceUpdateStatus = typeof DeviceUpdateStatus[keyof typeof DeviceUpdateStatus];
+
+
+export const DeviceUpdateStatus = {
+  online: 'online',
+  offline: 'offline',
+  error: 'error',
+  unknown: 'unknown',
+} as const;
+
+export interface DeviceUpdate {
+  name?: string;
+  type?: DeviceUpdateType;
+  ipAddress?: string;
+  firmwareVersion?: string;
+  status?: DeviceUpdateStatus;
+  location?: string;
+  notes?: string;
+}
+
+export interface DeviceHeartbeatInput {
+  ipAddress?: string;
+  firmwareVersion?: string;
+  rssi?: number;
 }
 
